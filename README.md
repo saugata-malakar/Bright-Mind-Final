@@ -3,6 +3,13 @@
 [![Gemma 4](https://img.shields.io/badge/Powered%20by-Gemma%204-blue)](https://ai.google.dev/gemma)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-ready-brightgreen)](docker-compose.yml)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/saugata-malakar/GEMMA-HACKATHON-2)
+
+## 🚀 Live Demo
+
+### **[🌐 View Live Demo on Vercel →](https://gemma-hackathon-2.vercel.app)**
+
+> **Note:** Deploy your own instance by clicking the "Deploy with Vercel" button above!
 
 > **Empowering healthcare workers in rural and remote areas with AI-powered medical assistance**
 
@@ -40,6 +47,34 @@ This project is submitted for the **Gemma 4 Good Hackathon** on Kaggle.
 - 🔧 Special Technology Track - Ollama
 
 ## 🚀 Quick Start
+
+### 🌐 **Try Live Demo**
+
+**[👉 Click Here to View Live Demo](https://gemma-hackathon-2.vercel.app)**
+
+### 📦 **Deploy Your Own**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/saugata-malakar/GEMMA-HACKATHON-2)
+
+**One-Click Deploy:**
+1. Click the "Deploy with Vercel" button above
+2. Sign in to Vercel (free)
+3. Configure: Root Directory = `frontend`
+4. Click "Deploy"
+5. Your app is live in 2 minutes! 🎉
+
+**Manual Deploy:**
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy
+vercel --prod
+```
+
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
+
+---
 
 ### Prerequisites
 
@@ -316,6 +351,56 @@ docker-compose -f docker-compose.edge.yml up -d
 - [ ] Integration with electronic health records (EHR)
 - [ ] Specialized models for specific conditions
 - [ ] Community health dashboard
+
+## 🌐 Deployment
+
+### Live Demo
+**[View Live Application →](https://gemma-hackathon-2.vercel.app)**
+
+### Deploy Your Own Instance
+
+#### Option 1: Vercel (Recommended - 2 minutes)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/saugata-malakar/GEMMA-HACKATHON-2)
+
+**Steps:**
+1. Click "Deploy with Vercel" button
+2. Sign in to Vercel (free account)
+3. Configure project:
+   - Framework: Vite
+   - Root Directory: `frontend`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+4. Click "Deploy"
+5. Done! Your app is live 🎉
+
+#### Option 2: Netlify
+```bash
+npm install -g netlify-cli
+cd frontend
+netlify deploy --prod
+```
+
+#### Option 3: Docker
+```bash
+docker-compose up -d
+```
+
+#### Option 4: Manual
+```bash
+cd frontend
+npm install
+npm run build
+# Deploy dist/ folder to any static host
+```
+
+**Deployment URLs:**
+- **Production:** https://gemma-hackathon-2.vercel.app
+- **Repository:** https://github.com/saugata-malakar/GEMMA-HACKATHON-2
+- **API Docs:** https://gemma-hackathon-2.vercel.app/api/docs
+
+For detailed deployment instructions, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) and [VERCEL_DEPLOYMENT_STEPS.md](VERCEL_DEPLOYMENT_STEPS.md).
+
+---
 
 ## 🤝 Contributing
 
