@@ -1,26 +1,32 @@
-"""API router"""
 from fastapi import APIRouter
+from app.api.v1.endpoints import tutor, analyzer, analytics, sync
 
 api_router = APIRouter()
 
-@api_router.get("/health")
-async def health_check():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "message": "MediGuide AI API is running",
-        "gemma4": "Ready to connect"
-    }
+# ── Socratic Tutor (Multi-Agent + Bloom + Emotion) ─────────────────────
+api_router.include_router(
+    tutor.router,
+    prefix="/tutor",
+    tags=["Socratic Tutor"],
+)
 
-@api_router.get("/test")
-async def test():
-    """Test endpoint"""
-    return {
-        "message": "API is working!",
-        "features": [
-            "Chat with Gemma 4",
-            "Symptom Analysis",
-            "Drug Interactions",
-            "Medical Knowledge Base"
-        ]
-    }
+# ── Gap Analyzer (Learning Path + Concept Linker + Spaced Repetition) ──
+api_router.include_router(
+    analyzer.router,
+    prefix="/analyzer",
+    tags=["Gap Analyzer"],
+)
+
+# ── Teacher Analytics (Class Overview + At-Risk Prediction) ────────────
+api_router.include_router(
+    analytics.router,
+    prefix="/analytics",
+    tags=["Teacher Analytics"],
+)
+
+# ── Offline Sync (Queue + Process + Status) ────────────────────────────
+api_router.include_router(
+    sync.router,
+    prefix="/sync",
+    tags=["Offline Sync"],
+)

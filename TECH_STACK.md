@@ -1,4 +1,4 @@
-# MediGuide AI - Technology Stack
+# CogniCore - Technology Stack
 
 ## 📚 Complete Technology Stack
 
@@ -256,11 +256,11 @@
 
 ### Third-Party Services
 
-#### Medical Data
-- **WHO API** - Health guidelines
-- **CDC API** - Disease information
-- **OpenFDA** - Drug information
-- **PubMed API** - Medical research
+#### Educational Data
+- **OER Commons API** - Open educational resources
+- **Wikipedia API** - Offline encyclopedia data
+- **Khan Academy API** - Educational standards
+- **Project Gutenberg API** - Public domain books
 
 #### Maps & Location
 - **OpenStreetMap** - Mapping
@@ -407,9 +407,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'MediGuide AI',
-        short_name: 'MediGuide',
-        description: 'Offline Medical Assistant',
+        name: 'CogniCore',
+        short_name: 'CogniCore',
+        description: 'Offline Educational Assistant',
         theme_color: '#2563EB',
         icons: [
           {
@@ -516,7 +516,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=postgresql://user:pass@postgres:5432/mediguide
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/cognicore
       - REDIS_URL=redis://redis:6379
       - OLLAMA_URL=http://ollama:11434
     depends_on:
@@ -531,7 +531,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=mediguide
+      - POSTGRES_DB=cognicore
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -654,4 +654,4 @@ volumes:
 
 ---
 
-This tech stack provides a solid foundation for building a production-ready, scalable, and maintainable medical AI assistant!
+This tech stack provides a solid foundation for building a production-ready, scalable, and maintainable educational AI assistant!

@@ -1,33 +1,36 @@
 # Dependencies
 node_modules/
-frontend/node_modules/
-backend/__pycache__/
-backend/*.pyc
-backend/venv/
-backend/.venv/
+__pycache__/
+*.pyc
+.venv/
+venv/
 
-# Build outputs
-frontend/dist/
-frontend/build/
-*.log
-
-# Environment variables
+# Environment
 .env
 .env.local
-.env.production
+
+# Build outputs
+dist/
+build/
+*.egg-info/
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Temporary files
-*.tmp
-*.temp
-.vercel
-.env*.local
+# Vercel
+.vercel/
+
+# Docker volumes
+postgres_data/
+redis_data/
+ollama_data/
+chroma_data/
+
+# Misc
+*.log
+*.zip

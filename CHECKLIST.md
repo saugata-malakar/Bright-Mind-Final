@@ -1,8 +1,8 @@
-# ✅ MediGuide AI - Development Checklist
+# ✅ CogniCore - Development Checklist
 
 ## 📋 Pre-Development
 
-- [x] Project idea finalized (MediGuide AI)
+- [x] Project idea finalized (CogniCore - Education)
 - [x] Documentation created
 - [x] Architecture designed
 - [x] Tech stack selected
@@ -14,9 +14,9 @@
 ### Backend Development
 - [x] FastAPI main app created
 - [x] Configuration setup
-- [ ] Database models completed
+- [ ] Database models completed (Users, Sessions, Assessments)
 - [ ] API endpoints implemented
-- [ ] Gemma 4 service integrated
+- [ ] Gemma 4 service integrated (Math, Science, Humanities agents)
 - [ ] RAG service implemented
 - [ ] Authentication added
 - [ ] Error handling added
@@ -30,10 +30,10 @@
 - [ ] UI components created
 - [ ] Pages implemented
   - [ ] Dashboard
-  - [ ] Chat interface
-  - [ ] Symptom checker
-  - [ ] Knowledge base
-  - [ ] History
+  - [ ] Tutoring interface
+  - [ ] Knowledge Gap Analyzer
+  - [ ] Educational Base
+  - [ ] History & Progress
   - [ ] Settings
 - [ ] API integration
 - [ ] State management
@@ -48,12 +48,12 @@
   - [ ] gemma4:2b
   - [ ] gemma4:9b
   - [ ] gemma4:27b
-- [ ] Prompt engineering completed
+- [ ] Prompt engineering completed for Socratic Tutor
 - [ ] RAG pipeline implemented
-- [ ] Medical knowledge base loaded
+- [ ] Educational knowledge base loaded
 - [ ] ChromaDB configured
-- [ ] Function calling implemented
-- [ ] Image analysis added
+- [ ] Function calling implemented (extracting mastery_score)
+- [ ] Diagram/Formula analysis added
 
 ## 🧪 Testing Phase
 
@@ -64,8 +64,8 @@
 - [ ] Redis connection works
 - [ ] Ollama connection works
 - [ ] API endpoints tested
-- [ ] Chat functionality works
-- [ ] Symptom checker works
+- [ ] Tutoring functionality works
+- [ ] Gap analyzer works
 - [ ] Offline mode works
 - [ ] PWA installable
 
@@ -112,16 +112,16 @@
 ### Pre-Production
 - [ ] Script written
 - [ ] Storyboard created
-- [ ] Demo scenarios planned
+- [ ] Demo scenarios planned (Offline classroom)
 - [ ] Screen recording software ready
 - [ ] Audio equipment tested
 
 ### Production
 - [ ] Problem introduction recorded (30s)
 - [ ] Solution demo recorded (2min)
-  - [ ] Chat demo
-  - [ ] Symptom checker demo
-  - [ ] Drug interaction demo
+  - [ ] Tutoring demo
+  - [ ] Gap analyzer demo
+  - [ ] Concept linker demo
   - [ ] Offline mode demo
 - [ ] Impact & future recorded (30s)
 
@@ -211,14 +211,13 @@
 ## 🎯 Priority Tasks (Do First)
 
 1. **Complete Backend Code** (4 hours)
-   - Copy code from `COMPLETE_CODE_GUIDE.md`
    - Test API endpoints
    - Verify Gemma 4 connection
 
 2. **Complete Frontend Pages** (4 hours)
    - Create Dashboard
-   - Create Chat interface
-   - Create Symptom checker
+   - Create Tutoring interface
+   - Create Gap analyzer
    - Test UI/UX
 
 3. **Test Locally** (2 hours)
@@ -281,7 +280,6 @@
 
 - **Project Summary:** `PROJECT_SUMMARY.md`
 - **Setup Guide:** `setup_project.md`
-- **Code Templates:** `COMPLETE_CODE_GUIDE.md`
 - **Architecture:** `ARCHITECTURE.md`
 - **Design:** `DESIGN.md`
 

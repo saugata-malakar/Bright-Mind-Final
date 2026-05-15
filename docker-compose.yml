@@ -4,12 +4,12 @@ services:
   # Frontend Service
   frontend:
     build:
-      context: ./frontend
+      context: ./Design a Form
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app
+      - ./Design a Form:/app
       - /app/node_modules
     environment:
       - VITE_API_URL=http://localhost:8000
@@ -17,7 +17,7 @@ services:
     depends_on:
       - backend
     networks:
-      - mediguide-network
+      - cognicore-network
 
   # Backend Service
   backend:
@@ -28,9 +28,9 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-      - ./medical-kb:/medical-kb
+      - ./educational-kb:/educational-kb
     environment:
-      - DATABASE_URL=postgresql://mediguide:mediguide123@postgres:5432/mediguide
+      - DATABASE_URL=postgresql://cognicore:cognicore123@postgres:5432/cognicore
       - REDIS_URL=redis://redis:6379/0
       - OLLAMA_URL=http://ollama:11434
       - CHROMA_URL=http://chromadb:8000
@@ -42,7 +42,7 @@ services:
       - ollama
       - chromadb
     networks:
-      - mediguide-network
+      - cognicore-network
 
   # PostgreSQL Database
   postgres:
@@ -50,15 +50,15 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=mediguide
-      - POSTGRES_PASSWORD=mediguide123
-      - POSTGRES_DB=mediguide
+      - POSTGRES_USER=cognicore
+      - POSTGRES_PASSWORD=cognicore123
+      - POSTGRES_DB=cognicore
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - mediguide-network
+      - cognicore-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mediguide"]
+      test: ["CMD-SHELL", "pg_isready -U cognicore"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -71,7 +71,7 @@ services:
     volumes:
       - redis_data:/data
     networks:
-      - mediguide-network
+      - cognicore-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -86,7 +86,7 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     networks:
-      - mediguide-network
+      - cognicore-network
     deploy:
       resources:
         reservations:
@@ -107,7 +107,7 @@ services:
       - IS_PERSISTENT=TRUE
       - ANONYMIZED_TELEMETRY=FALSE
     networks:
-      - mediguide-network
+      - cognicore-network
 
   # Nginx (Production)
   nginx:
@@ -122,7 +122,7 @@ services:
       - frontend
       - backend
     networks:
-      - mediguide-network
+      - cognicore-network
     profiles:
       - production
 
@@ -133,5 +133,5 @@ volumes:
   chroma_data:
 
 networks:
-  mediguide-network:
+  cognicore-network:
     driver: bridge
