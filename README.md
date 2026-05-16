@@ -3,6 +3,9 @@
 [![Gemma 4](https://img.shields.io/badge/Powered%20by-Gemma%204-blue)](https://ai.google.dev/gemma)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-ready-brightgreen)](docker-compose.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-success)](https://bright-mind.onrender.com/)
+
+### 🌐 Live Commercial Deployment: [https://bright-mind.onrender.com/](https://bright-mind.onrender.com/)
 
 > **Empowering students and teachers in remote areas with AI-powered, hyper-adaptive offline education.**
 
@@ -67,7 +70,8 @@ python serve.py
 ```
 
 4. **Access the application**
-- Frontend & Dashboard: http://localhost:5000
+- Local Frontend & Dashboard: http://localhost:5000
+- 🌐 **Live Cloud Deployment:** [https://bright-mind.onrender.com/](https://bright-mind.onrender.com/)
 
 ## 📁 Project Structure
 
