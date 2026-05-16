@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: brightmind
+    env: python
+    buildCommand: cd "Design a Form" && npm install && npm run build
+    startCommand: python serve.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: NODE_VERSION
+        value: 20.0.0
