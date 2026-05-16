@@ -11,7 +11,7 @@ import webbrowser
 import urllib.request
 import urllib.error
 
-PORT = 5000
+PORT = int(os.environ.get("PORT", 5000))
 DIST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Design a Form", "dist")
 OLLAMA_URL = "http://localhost:11434"
 MODEL = "gemma3:4b"  # Change to gemma4:9b if you have it pulled
