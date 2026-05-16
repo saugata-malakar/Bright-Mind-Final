@@ -7,7 +7,7 @@ interface WelcomeModalProps {
 export function WelcomeModal({ onClose }: WelcomeModalProps) {
   const features = [
     {
-      icon: <GraduationCap className="w-6 h-6 text-blue-600" />,
+      icon: <GraduationCap className="w-6 h-6 text-orange-600" />,
       title: 'Socratic AI Tutor',
       description: 'Gemma 4 guides students to answers without just giving them away.',
     },
@@ -34,10 +34,10 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
         </button>
 
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
+          <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
             <GraduationCap className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to CogniCore</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to BrightMind</h2>
           <p className="text-gray-600 text-lg">
             Your offline hyper-adaptive educational platform powered by Gemma 4.
           </p>
@@ -57,7 +57,7 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
 
         <button
           onClick={onClose}
-          className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg transition-colors shadow-lg shadow-blue-200"
+          className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold text-lg transition-colors shadow-lg shadow-orange-200"
         >
           Get Started
         </button>

@@ -28,39 +28,39 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-orange-500 via-red-600 to-rose-700 relative overflow-hidden">
         {/* Decorative circles */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full filter blur-2xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-400/20 rounded-full filter blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-400/10 rounded-full filter blur-2xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-red-400/20 rounded-full filter blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-orange-400/10 rounded-full filter blur-2xl" />
 
         <div className="relative z-10 flex flex-col justify-center px-16">
           <div className="flex items-center gap-3 mb-10">
             <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20">
               <GraduationCap className="w-7 h-7 text-white" />
             </div>
-            <span className="text-3xl font-bold text-white">CogniCore</span>
+            <span className="text-3xl font-bold text-white">BrightMind</span>
           </div>
 
           <h2 className="text-4xl font-extrabold text-white leading-tight mb-6">
             Every student deserves a{' '}
-            <span className="text-blue-200">brilliant tutor.</span>
+            <span className="text-orange-200">brilliant tutor.</span>
           </h2>
-          <p className="text-lg text-blue-100 leading-relaxed max-w-md">
-            Powered by Gemma 4, CogniCore adapts to each student's unique learning style, 
+          <p className="text-lg text-orange-100 leading-relaxed max-w-md">
+            Powered by Gemma 4, BrightMind adapts to each student's unique learning style, 
             pace, and emotional state — even without internet.
           </p>
 
           <div className="mt-12 space-y-4">
-            <div className="flex items-center gap-3 text-blue-100">
+            <div className="flex items-center gap-3 text-orange-100">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-sm font-bold text-white">✓</div>
               <span>Multi-agent Socratic tutoring</span>
             </div>
-            <div className="flex items-center gap-3 text-blue-100">
+            <div className="flex items-center gap-3 text-orange-100">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-sm font-bold text-white">✓</div>
               <span>Works 100% offline</span>
             </div>
-            <div className="flex items-center gap-3 text-blue-100">
+            <div className="flex items-center gap-3 text-orange-100">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-sm font-bold text-white">✓</div>
               <span>Free for all schools worldwide</span>
             </div>
@@ -87,10 +87,10 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
           {/* Header */}
           <div className="mb-8">
             <div className="lg:hidden flex items-center gap-2 mb-6">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
+              <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">CogniCore</span>
+              <span className="text-xl font-bold text-gray-900">BrightMind</span>
             </div>
             <h1 className="text-3xl font-extrabold text-gray-900">
               {isSignUp ? 'Create your account' : 'Welcome back'}
@@ -145,7 +145,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Full name"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                  className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition-all"
                 />
               </div>
             )}
@@ -157,7 +157,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
-                className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition-all"
               />
             </div>
 
@@ -168,7 +168,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none transition-all"
               />
               <button
                 type="button"
@@ -181,7 +181,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
 
             {!isSignUp && (
               <div className="flex justify-end">
-                <button type="button" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                <button type="button" className="text-sm text-orange-600 hover:text-orange-700 font-medium">
                   Forgot password?
                 </button>
               </div>
@@ -189,7 +189,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
 
             <button
               type="submit"
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all hover:-translate-y-0.5 text-lg"
+              className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-200 transition-all hover:-translate-y-0.5 text-lg"
             >
               {isSignUp ? 'Create Account' : 'Sign In'}
             </button>
@@ -200,7 +200,7 @@ export function AuthPage({ onLogin, onBack }: AuthPageProps) {
             {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-blue-600 font-semibold hover:text-blue-700"
+              className="text-orange-600 font-semibold hover:text-orange-700"
             >
               {isSignUp ? 'Sign In' : 'Sign Up'}
             </button>

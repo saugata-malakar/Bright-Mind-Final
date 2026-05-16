@@ -17,9 +17,11 @@ Integrated Services:
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
+import os
 import time
 import logging
 
@@ -224,6 +226,40 @@ async def health_check():
 
 # ── Include API Router ─────────────────────────────────────────────────
 app.include_router(api_router, prefix="/api/v1")
+
+
+# ── Serve Frontend Static Files ──────────────────────────────────────────
+# Path to the built frontend (dist folder)
+# We look for 'dist' in 'Design a Form' directory relative to this file
+frontend_dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "Design a Form", "dist"))
+
+if os.path.exists(frontend_dist_path):
+    # Mount static assets directory
+    assets_path = os.path.join(frontend_dist_path, "assets")
+    if os.path.exists(assets_path):
+        app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+
+    # Catch-all route for SPA
+    @app.get("/{full_path:path}", tags=["Frontend"])
+    async def serve_frontend(full_path: str):
+        # Exclude API routes from catch-all
+        if full_path.startswith("api/") or full_path.startswith("docs") or full_path.startswith("redoc") or full_path.startswith("openapi.json"):
+            return JSONResponse(status_code=404, content={"detail": "Not Found"})
+            
+        # Check if the file exists in dist
+        file_path = os.path.join(frontend_dist_path, full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+            
+        # Otherwise serve index.html (SPA routing)
+        index_path = os.path.join(frontend_dist_path, "index.html")
+        if os.path.isfile(index_path):
+            return FileResponse(index_path)
+        
+        return JSONResponse(status_code=404, content={"detail": "Frontend index.html not found"})
+else:
+    logger.warning(f"⚠️ Frontend dist folder not found at {frontend_dist_path}")
+    logger.warning("To merge frontend: run 'npm run build' in 'Design a Form' folder.")
 
 
 # ── Direct run ─────────────────────────────────────────────────────────

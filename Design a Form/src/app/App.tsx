@@ -8,6 +8,9 @@ import { GapAnalyzer } from './pages/GapAnalyzer';
 import { CurriculumBase } from './pages/CurriculumBase';
 import { History } from './pages/History';
 import { WelcomeModal } from './components/WelcomeModal';
+import { Settings } from './pages/Settings';
+import { Notifications } from './pages/Notifications';
+import { About } from './pages/About';
 
 type AppView = 'landing' | 'auth' | 'app';
 
@@ -18,15 +21,15 @@ export default function App() {
 
   useEffect(() => {
     // Check if user is already "logged in"
-    const isLoggedIn = localStorage.getItem('cognicore-logged-in');
+    const isLoggedIn = localStorage.getItem('brightmind-logged-in');
     if (isLoggedIn) {
       setView('app');
     }
   }, []);
 
   const handleLogin = () => {
-    localStorage.setItem('cognicore-logged-in', 'true');
-    const hasSeenWelcome = localStorage.getItem('cognicore-welcome-seen');
+    localStorage.setItem('brightmind-logged-in', 'true');
+    const hasSeenWelcome = localStorage.getItem('brightmind-welcome-seen');
     if (!hasSeenWelcome) {
       setShowWelcome(true);
     }
@@ -34,7 +37,7 @@ export default function App() {
   };
 
   const handleCloseWelcome = () => {
-    localStorage.setItem('cognicore-welcome-seen', 'true');
+    localStorage.setItem('brightmind-welcome-seen', 'true');
     setShowWelcome(false);
   };
 
@@ -61,6 +64,12 @@ export default function App() {
         return <CurriculumBase />;
       case 'history':
         return <History />;
+      case 'about':
+        return <About />;
+      case 'settings':
+        return <Settings />;
+      case 'notifications':
+        return <Notifications />;
       default:
         return <Dashboard onNavigate={setCurrentPage} />;
     }
