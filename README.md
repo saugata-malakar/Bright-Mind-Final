@@ -1,4 +1,4 @@
-# 🎓 CogniCore - Offline Adaptive Education Platform
+# 🎓 BrightMind - Offline Adaptive Education Platform
 
 [![Gemma 4](https://img.shields.io/badge/Powered%20by-Gemma%204-blue)](https://ai.google.dev/gemma)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -6,7 +6,7 @@
 
 > **Empowering students and teachers in remote areas with AI-powered, hyper-adaptive offline education.**
 
-CogniCore is an offline-first educational platform powered by Gemma 4. It acts as an orchestrator of specialized AI tutors, providing students with personalized learning, knowledge gap analysis, and interactive diagram evaluation—all without requiring an internet connection.
+BrightMind is an offline-first educational platform powered by Gemma 4. It acts as an orchestrator of specialized AI tutors, providing students with personalized learning, knowledge gap analysis, and interactive diagram evaluation—all without requiring an internet connection.
 
 ## 🎯 Problem Statement
 
@@ -18,7 +18,7 @@ Remote and rural classrooms face critical educational challenges:
 
 ## 💡 Solution
 
-CogniCore addresses these challenges by providing:
+BrightMind addresses these challenges by providing:
 
 ✅ **Offline-First Design** - Works completely offline using local Gemma 4 models  
 ✅ **Socratic Virtual Tutors** - AI that guides rather than just gives answers  
@@ -47,8 +47,8 @@ This project is submitted for the **Gemma 4 Good Hackathon** on Kaggle.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/cognicore.git
-cd cognicore
+git clone https://github.com/saugata-malakar/Bright-Mind.git
+cd Bright-Mind
 ```
 
 2. **Install Ollama and pull Gemma 4 models**
@@ -57,26 +57,25 @@ curl -fsSL https://ollama.ai/install.sh | sh
 ollama pull gemma4:9b
 ```
 
-3. **Start the application**
+3. **Build the frontend and start the application**
 ```bash
-docker-compose up -d
+cd "Design a Form"
+npm install
+npm run build
+cd ..
+python serve.py
 ```
 
 4. **Access the application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
+- Frontend & Dashboard: http://localhost:5000
 
 ## 📁 Project Structure
 
 ```
-cognicore/
-├── frontend/                 # React + TypeScript frontend
-├── backend/                  # FastAPI backend
-├── educational-kb/           # Educational knowledge base (RAG)
-├── docs/                     # Documentation
-├── docker-compose.yml        # Docker orchestration
-└── README.md                # This file
+Bright-Mind/
+├── Design a Form/            # React + TypeScript commercial frontend
+├── serve.py                  # Python backend server + Ollama proxy
+└── README.md                 # This file
 ```
 
 ## 🤖 Gemma 4 Integration
