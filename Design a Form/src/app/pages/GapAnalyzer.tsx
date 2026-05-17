@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { BrainCircuit, Upload, CheckCircle, AlertTriangle, ChevronRight, Play, Target, TrendingUp, BookOpen, FileText, Image, X, Sparkles, Cpu } from 'lucide-react';
+import { BrainCircuit, Upload, CheckCircle, AlertTriangle, ChevronRight, Play, Target, TrendingUp, BookOpen, FileText, Image, X, Sparkles, Cpu, MessageSquare, Send, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface GapResult {
@@ -30,6 +30,44 @@ export function GapAnalyzer() {
   const [usedModel, setUsedModel] = useState('');
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Remedial Chat State
+  const [chatMode, setChatMode] = useState<{ active: boolean; context: string }>({ active: false, context: '' });
+  const [chatMessages, setChatMessages] = useState<{ role: string; content: string }[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const startChat = (context: string) => {
+    setChatMode({ active: true, context });
+    setChatMessages([
+      { role: 'assistant', content: `Hello! I am your Gemma 4 Tutor. Let's work on: **${context}**. I will use the Socratic method to guide you. What do you already know about this topic?` }
+    ]);
+  };
+
+  const handleSendMessage = async () => {
+    if (!chatInput.trim() || isChatLoading) return;
+    const userMsg = chatInput;
+    setChatInput('');
+    setChatMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setIsChatLoading(true);
+
+    try {
+      const resp = await fetch('/api/v1/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `Student is struggling with: ${chatMode.context}. Student says: ${userMsg}`, history: chatMessages })
+      });
+      const data = await resp.json();
+      if (data.status === 'success') {
+        setChatMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+        setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    } catch {
+      setChatMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to Gemma 4 right now. Please make sure Ollama is running!" }]);
+    }
+    setIsChatLoading(false);
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -320,15 +358,47 @@ export function GapAnalyzer() {
             <h3 className="font-semibold text-gray-900 mb-4">Actions</h3>
             {step < 3 ? (
               <p className="text-sm text-gray-500 italic">Upload or describe student work to see AI recommendations.</p>
+            ) : chatMode.active ? (
+              <div className="flex flex-col h-[400px] border border-orange-200 rounded-xl overflow-hidden bg-orange-50/30">
+                <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold flex justify-between items-center text-sm">
+                  <span className="flex items-center gap-2"><Sparkles className="w-4 h-4" /> Gemma 4 Tutor Session</span>
+                  <button onClick={() => setChatMode({ active: false, context: '' })} className="hover:bg-white/20 p-1 rounded"><X className="w-4 h-4" /></button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {chatMessages.map((msg, i) => (
+                    <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}`}>
+                        {msg.role === 'user' ? <User className="w-4 h-4" /> : <BrainCircuit className="w-4 h-4" />}
+                      </div>
+                      <div className={`p-3 rounded-2xl max-w-[85%] text-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white border border-gray-200 text-gray-800 rounded-tl-none shadow-sm'}`}>
+                        {msg.content}
+                      </div>
+                    </div>
+                  ))}
+                  {isChatLoading && (
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center"><BrainCircuit className="w-4 h-4 animate-pulse" /></div>
+                      <div className="p-4 bg-white border border-gray-200 rounded-2xl rounded-tl-none flex gap-1"><div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" /><div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} /><div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} /></div>
+                    </div>
+                  )}
+                  <div ref={chatEndRef} />
+                </div>
+                <div className="p-3 bg-white border-t border-gray-200">
+                  <div className="flex gap-2">
+                    <input type="text" value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Type your answer..." className="flex-1 p-2 bg-gray-100 border-transparent rounded-lg text-sm focus:ring-2 focus:ring-orange-500 outline-none" />
+                    <button onClick={handleSendMessage} disabled={!chatInput.trim() || isChatLoading} className="p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50"><Send className="w-4 h-4" /></button>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className="space-y-3">
-                <button className="w-full flex items-center justify-between p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 border border-blue-200 font-medium text-sm">
+                <button onClick={() => startChat('General Review of All Gaps')} className="w-full flex items-center justify-between p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 border border-blue-200 font-medium text-sm">
                   Start Remedial Session <Play className="w-4 h-4" />
                 </button>
                 {results?.gaps?.map((gap, i) => (
-                  <div key={i} className="p-3 bg-gray-50 rounded-lg border text-sm flex items-center justify-between group cursor-pointer hover:bg-gray-100">
+                  <div key={i} onClick={() => startChat(gap.concept)} className="p-3 bg-gray-50 rounded-lg border text-sm flex items-center justify-between group cursor-pointer hover:bg-gray-100 hover:border-orange-200 transition-colors">
                     <span className="truncate pr-2">{gap.concept}</span>
-                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 flex-shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-orange-500 flex-shrink-0" />
                   </div>
                 ))}
               </div>
