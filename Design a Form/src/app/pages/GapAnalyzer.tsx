@@ -315,21 +315,6 @@ export function GapAnalyzer() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2"><Cpu className="w-5 h-5" /> Gemma Models</h3>
-            <div className="space-y-3">
-              {MODELS.map(m => (
-                <div key={m.id} className={`p-3 rounded-lg border ${selectedModel === m.id ? 'border-purple-300 bg-purple-50' : 'border-gray-100 bg-gray-50'}`}>
-                  <div className="flex items-center gap-2">
-                    <span>{m.icon}</span>
-                    <span className="text-sm font-semibold text-gray-900">{m.name}</span>
-                    {usedModel === m.id && <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">used</span>}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1 ml-6">{m.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
 
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Actions</h3>
