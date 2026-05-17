@@ -4,12 +4,35 @@ import { motion, AnimatePresence } from 'motion/react';
 
 // ── Video Library ─────────────────────────────────────────────────────
 const VIDEO_LIBRARY = [
-  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '12:34', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/n0FZhQ_GkKw', views: '2.4M' },
-  { id: 2, title: 'Photosynthesis Explained', subject: 'Biology', duration: '15:20', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/uixA8ZXx0KU', views: '3.1M' },
-  { id: 3, title: "Newton's Laws of Motion", subject: 'Physics', duration: '18:45', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/kKKM8Y-u7ds', views: '5.7M' },
-  { id: 4, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '14:10', thumbnail: '📐', gradient: 'from-purple-500 to-pink-500', videoUrl: 'https://www.youtube.com/embed/NybHckSEQBI', views: '1.8M' },
-  { id: 5, title: 'Periodic Table & Elements', subject: 'Chemistry', duration: '16:30', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/rz4Dd1I_fX0', views: '4.2M' },
-  { id: 6, title: 'World War II - Key Events', subject: 'History', duration: '20:15', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/Q78COTwT7nE', views: '2.9M' },
+  // Mathematics
+  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '12:34', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/3MwJIqaHUAE', views: '2.4M' },
+  { id: 2, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '14:10', thumbnail: '📐', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/NybHckSEQBI', views: '1.8M' },
+  { id: 3, title: 'Geometry: Area & Perimeter', subject: 'Mathematics', duration: '10:45', thumbnail: '📏', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/302eJ3TzJ4s', views: '3.2M' },
+  { id: 4, title: 'The Essence of Calculus', subject: 'Mathematics', duration: '17:05', thumbnail: '📉', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/WUvTyaaNkzM', views: '9.1M' },
+
+  // Biology
+  { id: 5, title: 'Photosynthesis Explained', subject: 'Biology', duration: '13:15', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/sQK3Yr4Sc_k', views: '8.1M' },
+  { id: 6, title: 'DNA & Genetics', subject: 'Biology', duration: '14:08', thumbnail: '🧬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/8m6hHRlKwxY', views: '12.5M' },
+  { id: 7, title: 'The Immune System', subject: 'Biology', duration: '08:52', thumbnail: '🛡️', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/zQGOcOUBi6s', views: '25.3M' },
+  { id: 8, title: 'Cell Structure and Function', subject: 'Biology', duration: '07:44', thumbnail: '🔬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/URUJD5NEXC8', views: '4.8M' },
+
+  // Physics
+  { id: 9, title: "Newton's Laws of Motion", subject: 'Physics', duration: '15:20', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/kKKM8Y-u7ds', views: '5.7M' },
+  { id: 10, title: 'Newtonian Gravity', subject: 'Physics', duration: '10:14', thumbnail: '🍎', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/E43-CfukEgs', views: '2.1M' },
+  { id: 11, title: 'The Map of Quantum Physics', subject: 'Physics', duration: '20:30', thumbnail: '⚛️', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/p7bzE1E5PMY', views: '3.4M' },
+  { id: 12, title: 'Electric Charge', subject: 'Physics', duration: '10:42', thumbnail: '⚡', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/ru032Mfsfig', views: '1.9M' },
+
+  // Chemistry
+  { id: 13, title: 'The Periodic Table', subject: 'Chemistry', duration: '11:21', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/rz4Dd1I_fX0', views: '7.2M' },
+  { id: 14, title: 'The Nucleus', subject: 'Chemistry', duration: '10:12', thumbnail: '🧪', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/fsWGnUfBv90', views: '4.5M' },
+  { id: 15, title: 'Chemical Bonds', subject: 'Chemistry', duration: '09:55', thumbnail: '🔗', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/QXT4OVM4vXI', views: '3.8M' },
+  { id: 16, title: 'Water & Solutions', subject: 'Chemistry', duration: '11:15', thumbnail: '💧', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/HVT3Y3_gHGg', views: '5.1M' },
+
+  // History
+  { id: 17, title: 'World War II: Crash Course', subject: 'History', duration: '13:26', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/H-2q-QMUIgY', views: '14.2M' },
+  { id: 18, title: 'Ancient Egypt', subject: 'History', duration: '11:55', thumbnail: '🏛️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/Z3Wvw6BivVI', views: '9.4M' },
+  { id: 19, title: 'The Roman Empire', subject: 'History', duration: '12:26', thumbnail: '⚔️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/oPf27gAup9U', views: '10.1M' },
+  { id: 20, title: 'The Cold War', subject: 'History', duration: '12:16', thumbnail: '🥶', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/y9HjvHZfCUI', views: '8.8M' },
 ];
 
 interface Message {
