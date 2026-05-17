@@ -14,7 +14,7 @@ import urllib.error
 PORT = int(os.environ.get("PORT", 5000))
 DIST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Design a Form", "dist")
 OLLAMA_URL = "http://localhost:11434"
-MODEL = "gemma3:4b"  # Change to gemma4:9b if you have it pulled
+MODEL = "gemma4:9b"  # Changed to Gemma 4 for the Hackathon
 
 SYSTEM_PROMPT = """You are BrightMind, an expert Socratic AI tutor powered by Gemma 4.
 You are built for offline classrooms in rural and remote areas.

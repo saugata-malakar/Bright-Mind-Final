@@ -14,9 +14,9 @@ interface GapResult {
 }
 
 const MODELS = [
-  { id: 'gemma3:4b', name: 'Gemma 3 4B', desc: 'Fast analysis', icon: '⚡' },
-  { id: 'gemma3:12b', name: 'Gemma 3 12B', desc: 'Balanced', icon: '🧠' },
-  { id: 'gemma3:27b', name: 'Gemma 3 27B', desc: 'Deep reasoning', icon: '🔬' },
+  { id: 'gemma4:9b', name: 'Gemma 4 9B', desc: 'Fast analysis', icon: '⚡' },
+  { id: 'gemma4:27b', name: 'Gemma 4 27B', desc: 'Balanced', icon: '🧠' },
+  { id: 'gemma4:72b', name: 'Gemma 4 72B', desc: 'Deep reasoning', icon: '🔬' },
 ];
 
 export function GapAnalyzer() {
