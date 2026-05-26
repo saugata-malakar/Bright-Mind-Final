@@ -26,13 +26,25 @@ class GemmaService:
             base_url=settings.OLLAMA_URL,
             timeout=settings.OLLAMA_TIMEOUT,
         )
+        self.use_cloud_fallback = False
+        self._openai_client = None
+        if settings.OPENAI_API_KEY:
+            try:
+                from openai import AsyncOpenAI
+                self._openai_client = AsyncOpenAI(
+                    api_key=settings.OPENAI_API_KEY,
+                    base_url=settings.OPENAI_API_BASE or "https://api.openai.com/v1",
+                )
+                logger.info("☁️ Cloud LLM client initialized as potential fallback")
+            except Exception as e:
+                logger.error(f"Failed to initialize Cloud LLM client: {e}")
 
     # ─── Model Discovery ─────────────────────────────────────────────────────
     async def discover_model(self) -> str:
         """
         Queries Ollama for locally available models.
         Tries each model in OLLAMA_FALLBACK_MODELS until one is found.
-        Sets self.active_model for the session.
+        If Ollama is unreachable, falls back to OpenAI if key is present.
         """
         try:
             resp = await self._client.get("/api/tags")
@@ -43,24 +55,30 @@ class GemmaService:
             logger.info(f"Ollama has {len(available_names)} model(s) available")
 
             for candidate in settings.OLLAMA_FALLBACK_MODELS:
-                # Match exactly or as prefix (e.g. "gemma4:9b" matches "gemma4:9b-instruct-q4")
                 matched = next(
                     (n for n in available_names if n.startswith(candidate.split(":")[0])),
                     None,
                 )
                 if matched:
                     self.active_model = matched
-                    logger.info(f"✅ Using model: {self.active_model}")
+                    self.use_cloud_fallback = False
+                    logger.info(f"✅ Using local Ollama model: {self.active_model}")
                     return self.active_model
 
-            # Nothing matched — use config default and hope for the best
             self.active_model = settings.OLLAMA_MODEL
+            self.use_cloud_fallback = False
             logger.warning(
-                f"⚠️  No preferred model found. Defaulting to {self.active_model}"
+                f"⚠️  No preferred model found. Defaulting to local Ollama {self.active_model}"
             )
         except Exception as e:
-            self.active_model = settings.OLLAMA_MODEL
-            logger.warning(f"⚠️  Ollama unreachable during discovery: {e}")
+            if settings.OPENAI_API_KEY:
+                self.active_model = settings.OPENAI_MODEL
+                self.use_cloud_fallback = True
+                logger.info(f"☁️ Ollama unreachable. Falling back to Cloud Provider: {self.active_model}")
+            else:
+                self.active_model = settings.OLLAMA_MODEL
+                self.use_cloud_fallback = False
+                logger.warning(f"⚠️  Ollama unreachable and no cloud fallback configured: {e}")
 
         return self.active_model
 
@@ -73,23 +91,12 @@ class GemmaService:
         max_tokens: int = 1024,
     ) -> str:
         """
-        Sends a chat completion request to Ollama.
-
-        Args:
-            system_prompt: Single system instruction string.
-            messages: List of {"role": "user"|"assistant", "content": "..."}.
-                      Must already be correctly formatted — this method will NOT
-                      re-wrap them.
-            temperature: Sampling temperature (0.0 = deterministic).
-            max_tokens: Upper token limit for the response.
-
-        Returns:
-            The assistant's response string, or an error fallback message.
+        Sends a chat completion request to Ollama, or falls back to Cloud LLM.
         """
         if not self.active_model:
             await self.discover_model()
 
-        # Validate messages — skip anything malformed so we never double-wrap
+        # Validate messages — skip anything malformed
         clean_messages = []
         for msg in messages:
             if (
@@ -106,6 +113,20 @@ class GemmaService:
 
         if not clean_messages:
             return "I'm ready to help! What would you like to explore today?"
+
+        if self.use_cloud_fallback and self._openai_client:
+            try:
+                openai_messages = [{"role": "system", "content": system_prompt}] + clean_messages
+                chat_completion = await self._openai_client.chat.completions.create(
+                    model=self.active_model,
+                    messages=openai_messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                return chat_completion.choices[0].message.content.strip()
+            except Exception as e:
+                logger.exception("Error calling Cloud LLM provider")
+                return f"An error occurred while generating a response from Cloud: {e}"
 
         payload = {
             "model": self.active_model,
@@ -151,8 +172,7 @@ class GemmaService:
         temperature: float = 0.7,
     ) -> AsyncIterator[str]:
         """
-        Streams tokens from Ollama as they are generated.
-        Yields individual token strings.
+        Streams tokens from Ollama or Cloud LLM as they are generated.
         """
         if not self.active_model:
             await self.discover_model()
@@ -164,6 +184,24 @@ class GemmaService:
             and m.get("role") in ("user", "assistant")
             and m.get("content", "").strip()
         ]
+
+        if self.use_cloud_fallback and self._openai_client:
+            try:
+                openai_messages = [{"role": "system", "content": system_prompt}] + clean_messages
+                response = await self._openai_client.chat.completions.create(
+                    model=self.active_model,
+                    messages=openai_messages,
+                    temperature=temperature,
+                    stream=True,
+                )
+                async for chunk in response:
+                    if chunk.choices and chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+                return
+            except Exception as e:
+                logger.exception("Cloud streaming error")
+                yield f"\n[Cloud stream error: {e}]"
+                return
 
         payload = {
             "model": self.active_model,
@@ -203,7 +241,6 @@ class GemmaService:
     ) -> str:
         """
         Convenience wrapper for single-turn, no-history completions.
-        Used by Bloom classifier, gap analyzer JSON extractions, etc.
         """
         return await self.generate(
             system_prompt=system_prompt,
@@ -214,3 +251,8 @@ class GemmaService:
 
     async def close(self):
         await self._client.aclose()
+        if self._openai_client:
+            try:
+                await self._openai_client.close()
+            except Exception:
+                pass

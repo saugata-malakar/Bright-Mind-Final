@@ -45,6 +45,11 @@ class Settings(BaseSettings):
         "gemma:2b",
     ]
 
+    # ─── Cloud LLM Fallback (For Render/Production Deployment) ───────────────
+    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
+    OPENAI_API_BASE: Optional[str] = os.getenv("OPENAI_API_BASE")  # e.g., https://api.groq.com/openai/v1 or OpenRouter
+    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")  # default cloud fallback model
+
     # ─── ChromaDB RAG ────────────────────────────────────────────────────────
     CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "./chroma_db")
     EDUCATIONAL_KB_PATH: str = os.getenv("EDUCATIONAL_KB_PATH", "./educational-kb")
