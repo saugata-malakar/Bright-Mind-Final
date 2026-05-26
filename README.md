@@ -3,9 +3,9 @@
 [![Gemma 4](https://img.shields.io/badge/Powered%20by-Gemma%204-blue)](https://ai.google.dev/gemma)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-ready-brightgreen)](docker-compose.yml)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-success)](https://bright-mind.onrender.com/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-success)](https://bright-mind-final.onrender.com/)
 
-### 🌐 Live Commercial Deployment: [https://bright-mind.onrender.com/](https://bright-mind.onrender.com/)
+### 🌐 Live Commercial Deployment: [https://bright-mind-final.onrender.com/](https://bright-mind-final.onrender.com/)
 
 > **Empowering students and teachers in remote areas with AI-powered, hyper-adaptive offline education.**
 
@@ -50,8 +50,8 @@ This project is submitted for the **Gemma 4 Good Hackathon** on Kaggle.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/saugata-malakar/Bright-Mind.git
-cd Bright-Mind
+git clone https://github.com/saugata-malakar/Bright-Mind-Final.git
+cd Bright-Mind-Final
 ```
 
 2. **Install Ollama and pull Gemma 4 models**
@@ -72,7 +72,7 @@ venv\Scripts\python -m uvicorn app.main:app --port 8000 --reload
 
 4. **Access the application**
 - Local Frontend & Dashboard: http://localhost:8000
-- 🌐 **Live Cloud Deployment:** [https://bright-mind.onrender.com/](https://bright-mind.onrender.com/)
+- 🌐 **Live Cloud Deployment:** [https://bright-mind-final.onrender.com/](https://bright-mind-final.onrender.com/)
 
 ## 📁 Project Structure
 
