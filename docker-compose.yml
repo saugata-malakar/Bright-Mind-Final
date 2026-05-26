@@ -17,7 +17,7 @@ services:
     depends_on:
       - backend
     networks:
-      - cognicore-network
+      - brightmind-network
 
   # Backend Service
   backend:
@@ -30,53 +30,14 @@ services:
       - ./backend:/app
       - ./educational-kb:/educational-kb
     environment:
-      - DATABASE_URL=postgresql://cognicore:cognicore123@postgres:5432/cognicore
-      - REDIS_URL=redis://redis:6379/0
-      - OLLAMA_URL=http://ollama:11434
-      - CHROMA_URL=http://chromadb:8000
+      - DATABASE_URL=sqlite+aiosqlite:///./brightmind.db
       - SECRET_KEY=your-secret-key-change-in-production
       - ENVIRONMENT=development
+      - OLLAMA_URL=http://ollama:11434
     depends_on:
-      - postgres
-      - redis
       - ollama
-      - chromadb
     networks:
-      - cognicore-network
-
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=cognicore
-      - POSTGRES_PASSWORD=cognicore123
-      - POSTGRES_DB=cognicore
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - cognicore-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cognicore"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - cognicore-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - brightmind-network
 
   # Ollama (Gemma 4 Runtime)
   ollama:
@@ -86,7 +47,7 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     networks:
-      - cognicore-network
+      - brightmind-network
     deploy:
       resources:
         reservations:
@@ -96,42 +57,9 @@ services:
               capabilities: [gpu]
     # For CPU-only, remove the deploy section above
 
-  # ChromaDB (Vector Database)
-  chromadb:
-    image: chromadb/chroma:latest
-    ports:
-      - "8001:8000"
-    volumes:
-      - chroma_data:/chroma/chroma
-    environment:
-      - IS_PERSISTENT=TRUE
-      - ANONYMIZED_TELEMETRY=FALSE
-    networks:
-      - cognicore-network
-
-  # Nginx (Production)
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - cognicore-network
-    profiles:
-      - production
-
 volumes:
-  postgres_data:
-  redis_data:
   ollama_data:
-  chroma_data:
 
 networks:
-  cognicore-network:
+  brightmind-network:
     driver: bridge

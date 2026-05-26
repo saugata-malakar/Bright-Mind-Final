@@ -1,10 +1,10 @@
-# 🚀 START HERE - CogniCore Project
+# 🚀 START HERE - BrightMind Project
 
 ## 👋 Welcome!
 
 Congratulations! I've created a **complete, production-ready foundation** for your Gemma 4 Good Hackathon submission.
 
-**Project:** CogniCore - Offline Adaptive Education Platform  
+**Project:** BrightMind - Offline Adaptive Education Platform  
 **Powered by:** Gemma 4 & Robust Vector Database (ChromaDB)  
 **Target:** Students and teachers in remote/offline classrooms  
 **Deadline:** May 18, 2026 (9 days remaining)
@@ -61,7 +61,7 @@ docker-compose up -d
 ```
 
 ### Step 3: Hackathon Video & Writeup
-Focus the video on a student in a remote village successfully learning a complex math concept through CogniCore's guidance, all while the school's internet is completely down.
+Focus the video on a student in a remote village successfully learning a complex math concept through BrightMind's guidance, all while the school's internet is completely down.
 
 ---
 

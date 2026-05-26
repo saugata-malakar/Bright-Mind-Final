@@ -1,148 +1,239 @@
 """
-Multi-Agent Orchestrator - Routes student queries to specialized Gemma 4 tutor agents.
-This is the brain of CogniCore's agentic architecture.
-
-Each agent has a unique system prompt tuned for its discipline:
-  - MathTutorAgent: Step-by-step problem decomposition, visual aids
-  - ScienceTutorAgent: Hypothesis-driven Socratic method
-  - HumanitiesTutorAgent: Critical thinking, source analysis
-  - MetaCognitiveAgent: Teaches students HOW to learn (study strategies)
+BrightMind - Agent Orchestrator
+Coordinates specialized agents for Socratic tutoring and gap analysis.
+All old branding references removed.
 """
 
+import json
 import logging
-from enum import Enum
+import re
+from typing import Optional
+
 from app.services.gemma_service import GemmaService
+from app.services.rag_service import RAGService
 
-logger = logging.getLogger(__name__)
-
-
-class AgentType(str, Enum):
-    MATH = "math"
-    SCIENCE = "science"
-    HUMANITIES = "humanities"
-    META_COGNITIVE = "meta_cognitive"
-
-
-AGENT_PROMPTS = {
-    AgentType.MATH: """You are a world-class Mathematics tutor inside CogniCore.
-RULES:
-1. NEVER give the final answer directly. Guide with questions.
-2. Break complex problems into visual, bite-sized steps.
-3. Use real-world analogies (pizza slices for fractions, building blocks for algebra).
-4. When the student is stuck, offer exactly ONE hint, then wait.
-5. Celebrate small victories with encouragement.
-6. If you detect a foundational gap, STOP and address it first before continuing.
-7. Always end your response with a guiding question back to the student.""",
-
-    AgentType.SCIENCE: """You are a world-class Science tutor inside CogniCore.
-RULES:
-1. Use the scientific method: Observe → Hypothesize → Test → Conclude.
-2. Turn every question into a mini-experiment the student can reason through.
-3. Relate abstract concepts to the student's everyday life.
-4. Ask "What do you think would happen if...?" before explaining.
-5. Encourage curiosity. There are no stupid questions.
-6. When explaining processes, use sequential numbered steps.
-7. Always end with "What else do you wonder about this?".""",
-
-    AgentType.HUMANITIES: """You are a world-class Humanities tutor inside CogniCore.
-RULES:
-1. Encourage critical thinking over memorization.
-2. Ask students to consider multiple perspectives on any historical event.
-3. Help students build arguments with evidence, not opinions.
-4. Use primary source analysis techniques.
-5. Connect historical events to modern-day parallels.
-6. For literature, ask about character motivations before themes.
-7. Always end with a thought-provoking question.""",
-
-    AgentType.META_COGNITIVE: """You are a Meta-Cognitive Learning Coach inside CogniCore.
-RULES:
-1. Your job is to teach students HOW to learn, not WHAT to learn.
-2. Introduce study techniques: Pomodoro, active recall, spaced repetition, Feynman technique.
-3. Help students identify their learning style (visual, auditory, kinesthetic).
-4. Coach them on self-assessment: "How confident are you on a scale of 1-5?"
-5. Teach them to break large assignments into smaller tasks.
-6. Help them build a study schedule.
-7. Encourage growth mindset: "You can't do it YET."."""
-}
-
-# Keywords used for basic routing (enhanced by Gemma classification in production)
-ROUTING_KEYWORDS = {
-    AgentType.MATH: [
-        "math", "algebra", "geometry", "calculus", "fraction", "equation",
-        "multiply", "divide", "add", "subtract", "number", "percent",
-        "ratio", "proportion", "graph", "slope", "area", "volume",
-        "triangle", "circle", "angle", "decimal", "integer", "exponent"
-    ],
-    AgentType.SCIENCE: [
-        "science", "biology", "chemistry", "physics", "atom", "molecule",
-        "cell", "organism", "energy", "force", "gravity", "evolution",
-        "ecosystem", "photosynthesis", "chemical", "reaction", "experiment",
-        "hypothesis", "planet", "solar", "element", "periodic", "dna"
-    ],
-    AgentType.HUMANITIES: [
-        "history", "geography", "literature", "essay", "war", "revolution",
-        "civilization", "culture", "democracy", "government", "poem",
-        "novel", "character", "theme", "philosophy", "society", "rights",
-        "constitution", "ancient", "medieval", "renaissance", "colonialism"
-    ],
-    AgentType.META_COGNITIVE: [
-        "study", "learn", "remember", "memorize", "focus", "concentrate",
-        "procrastinate", "exam", "test prep", "homework", "motivation",
-        "schedule", "organize", "notes", "revision", "confused", "overwhelmed"
-    ]
-}
+logger = logging.getLogger("brightmind.orchestrator")
 
 
 class AgentOrchestrator:
-    """
-    Routes incoming student messages to the most appropriate specialized
-    Gemma 4 tutor agent based on content analysis.
-    """
+    def __init__(self, gemma: GemmaService, rag: RAGService):
+        self._gemma = gemma
+        self._rag = rag
 
-    def __init__(self):
-        self.gemma = GemmaService()
-
-    def classify_intent(self, message: str) -> AgentType:
-        """Classify which agent should handle this message."""
-        message_lower = message.lower()
-        scores = {}
-
-        for agent_type, keywords in ROUTING_KEYWORDS.items():
-            score = sum(1 for kw in keywords if kw in message_lower)
-            scores[agent_type] = score
-
-        best = max(scores, key=scores.get)
-
-        # Default to meta-cognitive if no strong signal
-        if scores[best] == 0:
-            return AgentType.META_COGNITIVE
-
-        logger.info(f"Routed to {best.value} agent (score: {scores[best]})")
-        return best
-
-    async def process(self, message: str, student_context: str = "") -> dict:
-        """Process a student message through the appropriate agent."""
-        agent_type = self.classify_intent(message)
-        system_prompt = AGENT_PROMPTS[agent_type]
-
-        full_prompt = (
-            f"System: {system_prompt}\n\n"
-            f"Student Context: {student_context}\n\n"
-            f"Student: {message}\n\n"
-            f"Tutor:"
+    # ─── Socratic Tutor Agent ────────────────────────────────────────────────
+    async def socratic_response(
+        self,
+        message: str,
+        history: list[dict],
+        context: list[str],
+        subject: Optional[str] = None,
+        student_level: Optional[str] = None,
+    ) -> str:
+        """
+        Generates a Socratic tutoring response.
+        Guides the student with questions rather than giving direct answers.
+        """
+        system_prompt = self._build_socratic_system_prompt(
+            subject=subject,
+            student_level=student_level,
+            context=context,
         )
 
+        # Build message history — do NOT re-wrap already-formatted dicts
+        messages = self._prepare_messages(history, message)
+
+        response = await self._gemma.generate(
+            system_prompt=system_prompt,
+            messages=messages,
+            temperature=0.75,
+            max_tokens=1024,
+        )
+        return response
+
+    def _build_socratic_system_prompt(
+        self,
+        subject: Optional[str],
+        student_level: Optional[str],
+        context: list[str],
+    ) -> str:
+        subject_line = f"Subject: {subject}" if subject else "Subject: General"
+        level_line = (
+            f"Student level: {student_level}" if student_level else "Student level: unknown"
+        )
+
+        context_block = ""
+        if context:
+            excerpts = "\n\n".join(f"— {c[:400]}" for c in context[:3])
+            context_block = f"""
+─── Knowledge Base Context ───────────────────────────────
+{excerpts}
+──────────────────────────────────────────────────────────
+Use the above context to inform your questions. Do not quote it directly.
+"""
+
+        return f"""You are BrightMind's Socratic Tutor — an AI teaching assistant that guides
+students to discover answers through thoughtful questioning rather than lecturing.
+
+{subject_line}
+{level_line}
+{context_block}
+## Your Rules
+1. NEVER give the direct answer. Always ask a guiding question instead.
+2. Ask ONE clear question per response — do not overwhelm the student.
+3. Acknowledge what the student got right before probing what they got wrong.
+4. If the student is frustrated (says "I don't know", "just tell me"), give a
+   small hint and then ask a simpler scaffolding question.
+5. Keep responses concise — 2 to 4 sentences maximum.
+6. Match vocabulary to the student's level.
+7. When the student demonstrates mastery, celebrate it briefly and introduce
+   the next concept with a new question.
+
+Begin guiding the student now."""
+
+    # ─── Gap Analyzer Agent ───────────────────────────────────────────────────
+    async def analyze_gaps(
+        self,
+        student_response: str,
+        topic: str,
+        expected_concepts: list[str],
+        context: list[str],
+        history: list[dict],
+    ) -> dict:
+        """
+        Identifies prerequisite knowledge gaps in the student's response.
+        Returns structured JSON: {gaps, recommendations, follow_up_question}.
+        """
+        system_prompt = self._build_gap_analyzer_system_prompt(
+            topic=topic,
+            expected_concepts=expected_concepts,
+            context=context,
+        )
+
+        prompt = f"""Analyze this student response for knowledge gaps.
+
+Topic: {topic}
+Student response: "{student_response}"
+
+Return ONLY valid JSON — no markdown, no explanation, no preamble:
+{{
+  "gaps": ["gap 1", "gap 2"],
+  "recommendations": ["recommendation 1", "recommendation 2"],
+  "follow_up_question": "A single Socratic question to help the student"
+}}"""
+
+        raw = await self._gemma.complete(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            temperature=0.3,
+            max_tokens=768,
+        )
+
+        return self._parse_json_response(raw, fallback={
+            "gaps": ["Unable to identify gaps — please try again."],
+            "recommendations": ["Review the fundamentals of " + topic],
+            "follow_up_question": f"What do you already know about {topic}?",
+        })
+
+    def _build_gap_analyzer_system_prompt(
+        self,
+        topic: str,
+        expected_concepts: list[str],
+        context: list[str],
+    ) -> str:
+        concepts_line = (
+            "Expected concepts: " + ", ".join(expected_concepts)
+            if expected_concepts
+            else ""
+        )
+
+        context_block = ""
+        if context:
+            excerpts = "\n".join(f"- {c[:300]}" for c in context[:3])
+            context_block = f"\nCurriculum context:\n{excerpts}\n"
+
+        return f"""You are BrightMind's Knowledge Gap Analyzer.
+Your job is to identify MISSING prerequisite concepts in a student's response.
+
+Topic: {topic}
+{concepts_line}
+{context_block}
+## Guidelines
+- Focus on FOUNDATIONAL gaps — what prerequisite knowledge is missing?
+- Be specific: name the exact concept missing, not vague descriptions.
+- Recommendations should be actionable (e.g. "Review the definition of X").
+- The follow-up question must be Socratic — guide, not tell.
+- Return ONLY valid JSON. No markdown fences, no extra text."""
+
+    # ─── Concept Linker Agent ────────────────────────────────────────────────
+    async def link_concepts(
+        self,
+        concept_a: str,
+        concept_b: str,
+        context: list[str],
+    ) -> str:
+        """
+        Explains how two concepts are related using Socratic dialogue.
+        """
+        context_text = "\n".join(context[:2]) if context else ""
+        prompt = f"""A student is trying to understand how "{concept_a}" connects to "{concept_b}".
+        
+Context from curriculum:
+{context_text}
+
+Explain the connection using the Socratic method — use an analogy or example,
+then end with a question that helps the student verify their understanding."""
+
+        return await self._gemma.complete(
+            prompt=prompt,
+            system_prompt=(
+                "You are BrightMind's Concept Linker. "
+                "You help students see connections between ideas using Socratic questions."
+            ),
+            temperature=0.7,
+        )
+
+    # ─── Helpers ─────────────────────────────────────────────────────────────
+    @staticmethod
+    def _prepare_messages(history: list[dict], new_message: str) -> list[dict]:
+        """
+        Converts history to clean message dicts and appends the new user message.
+        Filters out any malformed entries to prevent double-wrapping.
+        """
+        messages = []
+        for msg in history:
+            if (
+                isinstance(msg, dict)
+                and msg.get("role") in ("user", "assistant")
+                and isinstance(msg.get("content"), str)
+                and msg["content"].strip()
+            ):
+                messages.append({
+                    "role": msg["role"],
+                    "content": msg["content"].strip(),
+                })
+        messages.append({"role": "user", "content": new_message.strip()})
+        return messages
+
+    @staticmethod
+    def _parse_json_response(raw: str, fallback: dict) -> dict:
+        """
+        Robustly extracts JSON from a model response.
+        Handles markdown code fences and minor formatting issues.
+        """
+        # Strip markdown code fences
+        cleaned = re.sub(r"```(?:json)?", "", raw).strip().rstrip("`").strip()
+
+        # Find the first {...} block
+        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group())
+            except json.JSONDecodeError:
+                pass
+
+        # Try parsing the whole cleaned string
         try:
-            result = await self.gemma.generate(prompt=full_prompt)
-            return {
-                "agent": agent_type.value,
-                "response": result.get("response", "I need a moment to think about that. Can you rephrase?"),
-                "routing_confidence": "high"
-            }
-        except Exception as e:
-            logger.error(f"Agent processing failed: {e}")
-            return {
-                "agent": agent_type.value,
-                "response": "I'm having trouble connecting to my knowledge base right now. Let's try again in a moment.",
-                "routing_confidence": "error"
-            }
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            logger.warning(f"Could not parse JSON from model response: {raw[:200]}")
+            return fallback

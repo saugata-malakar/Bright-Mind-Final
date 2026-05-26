@@ -1,8 +1,8 @@
-# ✅ CogniCore - Development Checklist
+# ✅ BrightMind - Development Checklist
 
 ## 📋 Pre-Development
 
-- [x] Project idea finalized (CogniCore - Education)
+- [x] Project idea finalized (BrightMind - Education)
 - [x] Documentation created
 - [x] Architecture designed
 - [x] Tech stack selected

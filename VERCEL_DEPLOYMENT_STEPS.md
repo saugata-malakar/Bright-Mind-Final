@@ -81,7 +81,7 @@ After deployment:
 ### ✅ Beautiful Frontend
 - Dashboard with colorful gradients
 - Professional Chat interface
-- Symptom Checker
+- Knowledge Gap Analyzer
 - All pages working
 - Responsive design
 - PWA (installable on mobile)
@@ -138,14 +138,14 @@ If you need to add later:
 Visit your Vercel URL and test:
 - ✅ Dashboard loads
 - ✅ Chat interface works
-- ✅ Symptom checker works
+- ✅ Gap Analyzer works
 - ✅ All pages accessible
 - ✅ Mobile responsive
 
 ### 2. Get Your URLs
 Vercel will provide:
-- **Production:** `https://mediguide-ai.vercel.app`
-- **Preview:** `https://mediguide-ai-git-main.vercel.app`
+- **Production:** `https://bright-mind.vercel.app`
+- **Preview:** `https://bright-mind-git-main.vercel.app`
 - **Custom Domain:** (optional) Add your own domain
 
 ### 3. Share Your Demo

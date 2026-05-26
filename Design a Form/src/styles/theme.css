@@ -40,10 +40,10 @@
   --sidebar-border: #E5E7EB;
   --sidebar-ring: oklch(0.708 0 0);
 
-  --medical-blue: #2563EB;
-  --medical-green: #10B981;
-  --medical-red: #EF4444;
-  --medical-yellow: #F59E0B;
+  --brand-blue: #2563EB;
+  --brand-green: #10B981;
+  --brand-red: #EF4444;
+  --brand-yellow: #F59E0B;
   --success: #10B981;
   --warning: #F59E0B;
   --error: #EF4444;

@@ -1,0 +1,28 @@
+=== SCIENCE FUNDAMENTALS: FORCES, PHOTOSYNTHESIS, AND CELLS ===
+
+1. Newton's Laws of Motion
+Sir Isaac Newton formulated three laws that describe how objects move in response to forces.
+- First Law (Inertia): An object at rest stays at rest, and an object in motion stays in motion with the same speed and in the same direction, unless acted upon by an unbalanced external force.
+- Second Law (F = ma): The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass. Force equals mass times acceleration (F = ma).
+- Third Law (Action & Reaction): For every action, there is an equal and opposite reaction. If Object A exerts a force on Object B, Object B exerts an equal force in the opposite direction on Object A.
+
+2. Gravity
+Gravity is an attractive force that exists between all objects with mass. The strength of the gravitational force depends on two factors:
+- Mass: The greater the mass of the objects, the stronger the gravity.
+- Distance: The closer the objects are to each other, the stronger the gravity.
+On Earth, gravity pulls objects downward toward the center of the planet, causing free-falling objects to accelerate at approximately 9.8 meters per second squared (9.8 m/s²).
+
+3. Photosynthesis
+Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy in the form of glucose.
+Formula: Carbon Dioxide + Water + Light Energy ---> Glucose + Oxygen
+- Raw Materials: Plants absorb water through their roots and carbon dioxide from the air through microscopic pores in their leaves called stomata.
+- Process: Inside leaf cells, tiny structures called chloroplasts capture solar energy using a green pigment called chlorophyll.
+- Products: Glucose is used by the plant for energy and growth, while oxygen is released into the atmosphere as a byproduct.
+
+4. Cell Structure and Function
+Cells are the basic building blocks of all living organisms.
+- Nucleus: The control center of the cell, which contains the organism's genetic material (DNA).
+- Cell Membrane: A protective barrier that controls what goes in and out of the cell.
+- Mitochondria: The powerhouses of the cell, where cellular respiration occurs to release energy.
+- Chloroplasts (Plants only): Organelles where photosynthesis takes place.
+- Cell Wall (Plants only): A rigid outer layer that provides structural support and protection.

@@ -1,4 +1,4 @@
-# 🎯 CogniCore - Final Instructions
+# 🎯 BrightMind - Final Instructions
 
 ## ✅ What's Been Created
 

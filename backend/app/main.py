@@ -1,164 +1,74 @@
 """
-CogniCore - Main Application Entry Point
-FastAPI backend for offline educational platform powered by Gemma 4
-
-Integrated Services:
-  - Multi-Agent Orchestrator (Math, Science, Humanities, MetaCognitive)
-  - Bloom's Taxonomy Adaptive Engine
-  - Emotion-Aware Adaptation
-  - Spaced Repetition (SM-2 Algorithm)
-  - Learning Path Generator (Prerequisite Graph)
-  - Cross-Disciplinary Concept Linker
-  - Offline Sync Manager
-  - Student Analytics & At-Risk Prediction
-  - RAG Service (ChromaDB + Educational KB)
+BrightMind - Unified FastAPI Backend
+Serves the React frontend AND all /api/v1/* routes on port 8000.
+No separate serve.py needed.
 """
 
-from fastapi import FastAPI, Request, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse, FileResponse
-from fastapi.exceptions import RequestValidationError
-from fastapi.staticfiles import StaticFiles
-from contextlib import asynccontextmanager
 import os
-import time
+import json
 import logging
+from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import Optional
 
-from app.core.config import settings
-from app.core.logging_config import setup_logging
-from app.api.v1.api import api_router
-from app.db.session import engine
-from app.db.init_db import init_db
+import httpx
+from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
-# Setup logging
-setup_logging()
-logger = logging.getLogger(__name__)
-
-# ── Global service instances (initialized during lifespan) ──────────────
+from app.config import settings
 from app.services.gemma_service import GemmaService
 from app.services.rag_service import RAGService
 from app.services.agent_orchestrator import AgentOrchestrator
 from app.services.bloom_classifier import BloomClassifier
-from app.services.emotion_detector import EmotionDetector
-from app.services.spaced_repetition import SpacedRepetitionEngine
-from app.services.learning_path import LearningPathGenerator
-from app.services.concept_linker import ConceptLinker
-from app.services.offline_sync import OfflineSyncManager
-from app.services.analytics import AnalyticsService
 
-# Service registry — shared across all endpoints
-services = {}
+# ─── Logging ─────────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.DEBUG if settings.DEBUG else logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger("brightmind")
+
+# ─── Service singletons ──────────────────────────────────────────────────────
+rag_service = RAGService()
+gemma_service = GemmaService()
+orchestrator = AgentOrchestrator(gemma_service, rag_service)
+bloom_classifier = BloomClassifier()
 
 
+# ─── Lifespan (startup / shutdown) ───────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan: initialize all services on startup, teardown on shutdown."""
+    logger.info("╔══════════════════════════════════════════════╗")
+    logger.info("║   🎓 BrightMind Backend  —  Starting up...   ║")
+    logger.info("╚══════════════════════════════════════════════╝")
+    logger.info(f"   Version  : {settings.APP_VERSION}")
+    logger.info(f"   Database : {settings.DATABASE_URL}")
+    logger.info(f"   Ollama   : {settings.OLLAMA_URL}")
+    logger.info(f"   ChromaDB : {settings.CHROMA_DB_PATH}")
 
-    logger.info("=" * 60)
-    logger.info("  CogniCore — Starting Application")
-    logger.info("=" * 60)
+    # 1. Seed the RAG knowledge base from ./educational-kb
+    await rag_service.ingest_directory(settings.EDUCATIONAL_KB_PATH)
 
-    # ── 1. Database ─────────────────────────────────────────────
-    try:
-        await init_db()
-        logger.info("✅ Database initialized (Users, Sessions, Assessments)")
-    except Exception as e:
-        logger.error(f"❌ Database init failed: {e}")
+    # 2. Discover the best available Ollama model
+    model = await gemma_service.discover_model()
+    logger.info(f"   AI Model : {model}")
 
-    # ── 2. Gemma 4 (Ollama) ────────────────────────────────────
-    try:
-        gemma = GemmaService()
-        healthy = await gemma.health_check()
-        services["gemma"] = gemma
-        if healthy:
-            logger.info("✅ Gemma 4 model connected via Ollama")
-        else:
-            logger.warning("⚠️  Gemma 4 model not responding — offline mode active")
-    except Exception as e:
-        logger.warning(f"⚠️  Gemma 4 unavailable: {e}")
-
-    # ── 3. RAG / Educational Knowledge Base ────────────────────
-    try:
-        rag = RAGService()
-        await rag.initialize()
-        services["rag"] = rag
-        logger.info("✅ Educational Knowledge Base (ChromaDB RAG) initialized")
-    except Exception as e:
-        logger.warning(f"⚠️  RAG service init failed: {e}")
-
-    # ── 4. Multi-Agent Orchestrator ────────────────────────────
-    orchestrator = AgentOrchestrator()
-    services["orchestrator"] = orchestrator
-    logger.info("✅ Multi-Agent Orchestrator loaded (Math, Science, Humanities, MetaCog)")
-
-    # ── 5. Bloom's Taxonomy Classifier ─────────────────────────
-    bloom = BloomClassifier()
-    services["bloom"] = bloom
-    logger.info("✅ Bloom's Taxonomy Adaptive Engine loaded")
-
-    # ── 6. Emotion Detector ────────────────────────────────────
-    emotion = EmotionDetector()
-    services["emotion"] = emotion
-    logger.info("✅ Emotion-Aware Adaptation Engine loaded")
-
-    # ── 7. Spaced Repetition Engine ────────────────────────────
-    srs = SpacedRepetitionEngine()
-    services["srs"] = srs
-    logger.info("✅ Spaced Repetition Engine (SM-2) loaded")
-
-    # ── 8. Learning Path Generator ─────────────────────────────
-    path_gen = LearningPathGenerator()
-    services["path_gen"] = path_gen
-    logger.info("✅ Learning Path Generator (Prerequisite Graph) loaded")
-
-    # ── 9. Cross-Disciplinary Concept Linker ───────────────────
-    linker = ConceptLinker()
-    services["linker"] = linker
-    logger.info("✅ Cross-Disciplinary Concept Linker loaded")
-
-    # ── 10. Offline Sync Manager ───────────────────────────────
-    sync_mgr = OfflineSyncManager()
-    services["sync"] = sync_mgr
-    logger.info("✅ Offline Sync Manager loaded")
-
-    # ── 11. Analytics Service ──────────────────────────────────
-    analytics = AnalyticsService()
-    services["analytics"] = analytics
-    logger.info("✅ Student Analytics & At-Risk Prediction Engine loaded")
-
-    logger.info("=" * 60)
-    logger.info("  CogniCore — All 11 services initialized successfully")
-    logger.info("  API Docs: http://localhost:8000/docs")
-    logger.info("=" * 60)
-
-    # Store services on app state so endpoints can access them
-    app.state.services = services
-
+    logger.info("✅ BrightMind is ready — http://localhost:8000")
     yield
-
-    # ── Shutdown ───────────────────────────────────────────────
-    logger.info("Shutting down CogniCore application...")
-    await engine.dispose()
-    logger.info("Application shutdown complete")
+    logger.info("👋 BrightMind shutting down gracefully.")
 
 
-# ── Create FastAPI application ──────────────────────────────────────────
+# ─── App ─────────────────────────────────────────────────────────────────────
 app = FastAPI(
     title=settings.APP_NAME,
-    description=(
-        "CogniCore — An offline-first, hyper-adaptive educational platform "
-        "powered by Gemma 4. Features multi-agent Socratic tutoring, Bloom's "
-        "Taxonomy adaptation, spaced repetition, and predictive at-risk analytics."
-    ),
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json",
+    version=settings.APP_VERSION,
+    description=settings.APP_DESCRIPTION,
     lifespan=lifespan,
 )
 
-# ── Middleware ──────────────────────────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -166,110 +76,192 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    """Add processing time to response headers"""
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(round(process_time, 4))
-    return response
+# ─── Request / Response schemas ──────────────────────────────────────────────
+class ChatMessage(BaseModel):
+    role: str           # "user" | "assistant"
+    content: str
 
 
-# ── Exception Handlers ─────────────────────────────────────────────────
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"detail": exc.errors(), "body": exc.body},
-    )
+class ChatRequest(BaseModel):
+    message: str
+    history: list[ChatMessage] = []
+    subject: Optional[str] = None
+    student_level: Optional[str] = None   # "beginner" | "intermediate" | "advanced"
+    use_rag: bool = True
 
 
-@app.exception_handler(Exception)
-async def general_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {exc}", exc_info=True)
-    return JSONResponse(
-        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={
-            "detail": "Internal server error",
-            "message": str(exc) if settings.DEBUG else "An error occurred",
+class ChatResponse(BaseModel):
+    response: str
+    bloom_level: Optional[str] = None
+    context_used: list[str] = []
+    model_used: str
+
+
+class AnalyzeRequest(BaseModel):
+    student_response: str
+    topic: str
+    expected_concepts: list[str] = []
+    history: list[ChatMessage] = []
+
+
+class AnalyzeResponse(BaseModel):
+    gaps: list[str]
+    recommendations: list[str]
+    bloom_level: str
+    follow_up_question: str
+    context_used: list[str] = []
+
+
+# ─── Health ──────────────────────────────────────────────────────────────────
+@app.get("/health")
+async def health():
+    """
+    Returns health status including Ollama connectivity.
+    Frontend checks `ollama.status` to show the connection badge.
+    """
+    ollama_status = "disconnected"
+    active_model = None
+    try:
+        async with httpx.AsyncClient(timeout=5) as client:
+            resp = await client.get(f"{settings.OLLAMA_URL}/api/tags")
+            if resp.status_code == 200:
+                ollama_status = "connected"
+                models = resp.json().get("models", [])
+                active_model = gemma_service.active_model or (
+                    models[0]["name"] if models else None
+                )
+    except Exception:
+        pass
+
+    return {
+        "status": "ok",
+        "app": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "ollama": {
+            "status": ollama_status,
+            "url": settings.OLLAMA_URL,
+            "model": active_model,
         },
+        "rag": {
+            "status": "ready" if rag_service.is_ready else "indexing",
+            "documents_indexed": rag_service.document_count,
+        },
+    }
+
+
+# ─── Chat — Socratic Tutor ────────────────────────────────────────────────────
+@app.post("/api/v1/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    """
+    Main Socratic tutor endpoint.
+    1. Retrieves relevant RAG context from ChromaDB (or TF-IDF fallback).
+    2. Passes context + history to the multi-agent orchestrator.
+    3. Classifies Bloom's level for the student's message.
+    """
+    try:
+        # Step 1: RAG context retrieval
+        context_chunks: list[str] = []
+        if request.use_rag:
+            context_chunks = await rag_service.search(
+                request.message, n=settings.RAG_TOP_K
+            )
+
+        # Step 2: Socratic response via orchestrator
+        response_text = await orchestrator.socratic_response(
+            message=request.message,
+            history=[m.dict() for m in request.history],
+            context=context_chunks,
+            subject=request.subject,
+            student_level=request.student_level,
+        )
+
+        # Step 3: Bloom's level (fire-and-forget, non-blocking)
+        bloom_level = None
+        try:
+            bloom_result = await bloom_classifier.classify(request.message)
+            bloom_level = bloom_result.get("level")
+        except Exception:
+            pass
+
+        return ChatResponse(
+            response=response_text,
+            bloom_level=bloom_level,
+            context_used=context_chunks[:2],   # return top 2 for transparency
+            model_used=gemma_service.active_model or settings.OLLAMA_MODEL,
+        )
+
+    except Exception as e:
+        logger.exception("Chat endpoint error")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Analyze — Knowledge Gap Analyzer ────────────────────────────────────────
+@app.post("/api/v1/analyze", response_model=AnalyzeResponse)
+async def analyze(request: AnalyzeRequest):
+    """
+    Knowledge gap analyzer endpoint.
+    Identifies missing prerequisite concepts and returns Socratic follow-up.
+    """
+    try:
+        # RAG context for the topic
+        context_chunks = await rag_service.search(
+            f"{request.topic} prerequisites foundational concepts",
+            n=settings.RAG_TOP_K,
+        )
+
+        # Gap analysis via orchestrator
+        analysis = await orchestrator.analyze_gaps(
+            student_response=request.student_response,
+            topic=request.topic,
+            expected_concepts=request.expected_concepts,
+            context=context_chunks,
+            history=[m.dict() for m in request.history],
+        )
+
+        # Bloom's level for the student's response
+        bloom_result = await bloom_classifier.classify(request.student_response)
+
+        return AnalyzeResponse(
+            gaps=analysis.get("gaps", []),
+            recommendations=analysis.get("recommendations", []),
+            bloom_level=bloom_result.get("level", "Remember"),
+            follow_up_question=analysis.get("follow_up_question", ""),
+            context_used=context_chunks[:2],
+        )
+
+    except Exception as e:
+        logger.exception("Analyze endpoint error")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Serve built React frontend (production) ─────────────────────────────────
+FRONTEND_DIST = Path(__file__).parent.parent.parent / "Design a Form" / "dist"
+
+if FRONTEND_DIST.exists():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(FRONTEND_DIST / "assets")),
+        name="assets",
     )
 
-
-# ── Root Endpoints ─────────────────────────────────────────────────────
-@app.get("/", tags=["Root"])
-async def root():
-    return {
-        "app": "CogniCore",
-        "tagline": "Offline-first hyper-adaptive education powered by Gemma 4",
-        "version": "1.0.0",
-        "docs": "/docs",
-        "health": "/health",
-    }
-
-
-@app.get("/health", tags=["Health"])
-async def health_check():
-    return {
-        "status": "healthy",
-        "app_name": settings.APP_NAME,
-        "version": "1.0.0",
-        "environment": settings.ENVIRONMENT,
-        "services_loaded": list(services.keys()),
-        "services_count": len(services),
-    }
-
-
-# ── Include API Router ─────────────────────────────────────────────────
-app.include_router(api_router, prefix="/api/v1")
-
-
-# ── Serve Frontend Static Files ──────────────────────────────────────────
-# Path to the built frontend (dist folder)
-# We look for 'dist' in 'Design a Form' directory relative to this file
-frontend_dist_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "Design a Form", "dist"))
-
-if os.path.exists(frontend_dist_path):
-    # Mount static assets directory
-    assets_path = os.path.join(frontend_dist_path, "assets")
-    if os.path.exists(assets_path):
-        app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
-
-    # Catch-all route for SPA
-    @app.get("/{full_path:path}", tags=["Frontend"])
-    async def serve_frontend(full_path: str):
-        # Exclude API routes from catch-all
-        if full_path.startswith("api/") or full_path.startswith("docs") or full_path.startswith("redoc") or full_path.startswith("openapi.json"):
-            return JSONResponse(status_code=404, content={"detail": "Not Found"})
-            
-        # Check if the file exists in dist
-        file_path = os.path.join(frontend_dist_path, full_path)
-        if os.path.isfile(file_path):
-            return FileResponse(file_path)
-            
-        # Otherwise serve index.html (SPA routing)
-        index_path = os.path.join(frontend_dist_path, "index.html")
-        if os.path.isfile(index_path):
-            return FileResponse(index_path)
-        
-        return JSONResponse(status_code=404, content={"detail": "Frontend index.html not found"})
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """Catch-all: serve React's index.html for client-side routing."""
+        index = FRONTEND_DIST / "index.html"
+        if index.exists():
+            return FileResponse(str(index))
+        return JSONResponse(
+            {"error": "Frontend not built. Run: cd 'Design a Form' && npm run build"},
+            status_code=404,
+        )
 else:
-    logger.warning(f"⚠️ Frontend dist folder not found at {frontend_dist_path}")
-    logger.warning("To merge frontend: run 'npm run build' in 'Design a Form' folder.")
-
-
-# ── Direct run ─────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.DEBUG,
-        log_level="info",
-    )
+    @app.get("/")
+    async def root():
+        return {
+            "message": "🎓 BrightMind API is running",
+            "docs": "http://localhost:8000/docs",
+            "health": "http://localhost:8000/health",
+            "note": "Frontend not found. Run: cd 'Design a Form' && npm run build",
+        }

@@ -1,4 +1,4 @@
-# CogniCore - Technology Stack
+# BrightMind - Technology Stack
 
 ## 📚 Complete Technology Stack
 
@@ -407,8 +407,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'CogniCore',
-        short_name: 'CogniCore',
+        name: 'BrightMind',
+        short_name: 'BrightMind',
         description: 'Offline Educational Assistant',
         theme_color: '#2563EB',
         icons: [
@@ -516,7 +516,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      - DATABASE_URL=postgresql://user:pass@postgres:5432/cognicore
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/brightmind
       - REDIS_URL=redis://redis:6379
       - OLLAMA_URL=http://ollama:11434
     depends_on:
@@ -531,7 +531,7 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=cognicore
+      - POSTGRES_DB=brightmind
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

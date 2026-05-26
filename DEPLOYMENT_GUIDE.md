@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide - MediGuide AI
+# 🚀 Deployment Guide - BrightMind
 
 ## Deploy to Vercel (Recommended)
 
@@ -69,7 +69,7 @@ After deployment, you'll get:
 ### Frontend
 - ✅ React application
 - ✅ Beautiful UI
-- ✅ All pages (Dashboard, Chat, Diagnosis, etc.)
+- ✅ All pages (Dashboard, Chat, Gap Analyzer, Tutor Session, etc.)
 - ✅ Optimized build
 - ✅ Static assets
 
@@ -133,19 +133,19 @@ http://localhost:8000  # Backend
 #### AWS ECS
 ```bash
 # Build image
-docker build -t mediguide-ai .
+docker build -t brightmind .
 
 # Push to ECR
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin your-account.dkr.ecr.us-east-1.amazonaws.com
-docker tag mediguide-ai:latest your-account.dkr.ecr.us-east-1.amazonaws.com/mediguide-ai:latest
-docker push your-account.dkr.ecr.us-east-1.amazonaws.com/mediguide-ai:latest
+docker tag brightmind:latest your-account.dkr.ecr.us-east-1.amazonaws.com/brightmind:latest
+docker push your-account.dkr.ecr.us-east-1.amazonaws.com/brightmind:latest
 ```
 
 #### Google Cloud Run
 ```bash
 # Build and deploy
-gcloud builds submit --tag gcr.io/your-project/mediguide-ai
-gcloud run deploy mediguide-ai --image gcr.io/your-project/mediguide-ai --platform managed
+gcloud builds submit --tag gcr.io/your-project/brightmind
+gcloud run deploy brightmind --image gcr.io/your-project/brightmind --platform managed
 ```
 
 ---
@@ -179,7 +179,7 @@ gcloud run deploy mediguide-ai --image gcr.io/your-project/mediguide-ai --platfo
 heroku login
 
 # Create app
-heroku create mediguide-ai-backend
+heroku create brightmind-backend
 
 # Deploy
 git subtree push --prefix backend heroku main
@@ -197,7 +197,7 @@ VITE_WS_URL=wss://your-backend.railway.app
 
 ### Backend (.env)
 ```env
-DATABASE_URL=postgresql://user:pass@host:5432/mediguide
+DATABASE_URL=postgresql://user:pass@host:5432/brightmind
 REDIS_URL=redis://host:6379/0
 OLLAMA_URL=http://localhost:11434
 SECRET_KEY=your-secret-key

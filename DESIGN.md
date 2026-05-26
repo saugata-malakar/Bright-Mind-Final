@@ -1,4 +1,4 @@
-# CogniCore - Design Document
+# BrightMind - Design Document
 
 ## 🎨 Visual Design System
 
@@ -114,7 +114,7 @@
 │  └────────────────────────────────────────────┘        │
 │                                                          │
 │  ┌────────────────────────────────────────────┐        │
-│  │ 🤖 CogniCore:                              │        │
+│  │ 🤖 BrightMind:                              │        │
 │  │                                            │        │
 │  │ That's a great question! Let's think about │        │
 │  │ it this way:                               │        │

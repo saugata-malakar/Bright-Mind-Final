@@ -1,8 +1,8 @@
-# 🎓 CogniCore - Complete Project Summary
+# 🎓 BrightMind - Complete Project Summary
 
 ## 🎯 Executive Summary
 
-**CogniCore** is an offline-first, hyper-adaptive educational platform powered by Gemma 4. It acts as an orchestrator of specialized AI tutors, designed to empower students and teachers in remote areas with personalized learning, knowledge gap analysis, and dynamic lesson generation—all without requiring an internet connection.
+**BrightMind** is an offline-first, hyper-adaptive educational platform powered by Gemma 4. It acts as an orchestrator of specialized AI tutors, designed to empower students and teachers in remote areas with personalized learning, knowledge gap analysis, and dynamic lesson generation—all without requiring an internet connection.
 
 **Submission for:** Gemma 4 Good Hackathon  
 **Tracks:** Main Track, Future of Education Impact Track, Ollama Special Technology Track  
@@ -25,7 +25,7 @@
 - A teacher in a rural school manages 50 students with varying reading levels and math skills.
 - No internet access means no interactive tools or up-to-date encyclopedias.
 - Students who fall behind stay behind because the curriculum moves on.
-- **CogniCore provides instant, offline, personalized tutoring and curriculum adaptation.**
+- **BrightMind provides instant, offline, personalized tutoring and curriculum adaptation.**
 
 ---
 
@@ -92,7 +92,7 @@ Maximum Capability (District Servers, High-end Workstations)
 ```python
 # Prompt Engineering for Educational Context
 EDUCATION_SYSTEM_PROMPT = """
-You are CogniCore, an expert Socratic tutor for students in remote areas.
+You are BrightMind, an expert Socratic tutor for students in remote areas.
 
 CAPABILITIES:
 - Concept explanation and simplification

@@ -1,8 +1,8 @@
-# CogniCore - Architecture Document
+# BrightMind - Architecture Document
 
 ## 🎯 Project Overview
 
-**CogniCore** is an offline-first, hyper-adaptive educational assistant powered by Gemma 4 that provides students and teachers in remote areas with instant access to personalized tutoring, knowledge gap analysis, and interactive curriculum generation.
+**BrightMind** is an offline-first, hyper-adaptive educational assistant powered by Gemma 4 that provides students and teachers in remote areas with instant access to personalized tutoring, knowledge gap analysis, and interactive curriculum generation.
 
 ## 🏗️ System Architecture
 
@@ -65,7 +65,7 @@
 ## 🤖 AI/ML Architecture
 
 ### Agentic Routing Strategy
-CogniCore utilizes multiple specialized instances of Gemma 4, routed dynamically based on the student's input:
+BrightMind utilizes multiple specialized instances of Gemma 4, routed dynamically based on the student's input:
 - **Math Tutor Agent:** Prompted to explicitly ask for steps and identify calculation errors.
 - **Humanities Agent:** Prompted to encourage critical thinking, historical context, and essay structuring.
 - **Assessment Agent:** Uses function calling to extract `mastery_score` and `knowledge_gaps` into structured JSON.
@@ -73,7 +73,7 @@ CogniCore utilizes multiple specialized instances of Gemma 4, routed dynamically
 #### Prompt Engineering
 ```python
 EDUCATION_SYSTEM_PROMPT = """
-You are CogniCore, an expert Socratic tutor. 
+You are BrightMind, an expert Socratic tutor. 
 
 CRITICAL RULES:
 - Never give the direct answer.

@@ -12,10 +12,10 @@ export function Button({ variant = 'primary', size = 'md', className, children, 
   const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
-    primary: 'bg-[var(--medical-blue)] text-white hover:bg-[#1d4ed8]',
+    primary: 'bg-[var(--brand-blue)] text-white hover:bg-[#1d4ed8]',
     secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-    danger: 'bg-[var(--medical-red)] text-white hover:bg-[#dc2626]',
-    success: 'bg-[var(--medical-green)] text-white hover:bg-[#059669]',
+    danger: 'bg-[var(--brand-red)] text-white hover:bg-[#dc2626]',
+    success: 'bg-[var(--brand-green)] text-white hover:bg-[#059669]',
     ghost: 'hover:bg-gray-100 text-gray-700',
   };
 
@@ -126,7 +126,7 @@ export function Input({ label, error, className, ...props }: InputProps) {
       {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <input
         className={cn(
-          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--medical-blue)] focus:border-transparent outline-none transition-all',
+          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent outline-none transition-all',
           error && 'border-red-500 focus:ring-red-500',
           className
         )}
@@ -149,7 +149,7 @@ export function Textarea({ label, error, className, ...props }: TextareaProps) {
       {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <textarea
         className={cn(
-          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--medical-blue)] focus:border-transparent outline-none transition-all resize-none',
+          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent outline-none transition-all resize-none',
           error && 'border-red-500 focus:ring-red-500',
           className
         )}
@@ -174,7 +174,7 @@ export function Checkbox({ label, checked, onChange }: CheckboxProps) {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 text-[var(--medical-blue)] border-gray-300 rounded focus:ring-[var(--medical-blue)]"
+        className="w-4 h-4 text-[var(--brand-blue)] border-gray-300 rounded focus:ring-[var(--brand-blue)]"
       />
       <span className="text-sm text-gray-700">{label}</span>
     </label>
@@ -193,7 +193,7 @@ export function Select({ label, options, className, ...props }: SelectProps) {
       {label && <label className="block text-sm font-medium text-gray-700">{label}</label>}
       <select
         className={cn(
-          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--medical-blue)] focus:border-transparent outline-none transition-all',
+          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent outline-none transition-all',
           className
         )}
         {...props}

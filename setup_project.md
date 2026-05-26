@@ -1,8 +1,8 @@
-# CogniCore - Complete Project Setup Guide
+# BrightMind - Complete Project Setup Guide
 
 ## 🎯 Project Pivot Successful!
 
-I've adapted the foundation for your **CogniCore** project - a complete offline educational assistant powered by Gemma 4 for the hackathon.
+I've adapted the foundation for your **BrightMind** project - a complete offline educational assistant powered by Gemma 4 for the hackathon.
 
 ## 📁 What's Been Created
 
@@ -24,7 +24,7 @@ I've adapted the foundation for your **CogniCore** project - a complete offline 
 
 ### Directory Structure ✅
 ```
-cognicore/
+brightmind/
 ├── frontend/src/
 │   ├── components/
 │   ├── hooks/

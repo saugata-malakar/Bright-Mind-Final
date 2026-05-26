@@ -25,6 +25,6 @@
   ],
   "env": {
     "OLLAMA_URL": "http://localhost:11434",
-    "DATABASE_URL": "postgresql://user:pass@localhost:5432/mediguide"
+    "DATABASE_URL": "postgresql://user:pass@localhost:5432/brightmind"
   }
 }

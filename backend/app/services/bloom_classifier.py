@@ -2,7 +2,7 @@
 Bloom's Taxonomy Adaptive Engine
 
 Classifies student cognitive level in real-time and adapts question difficulty.
-This is a GROUNDBREAKING feature: CogniCore doesn't just tutor — it dynamically
+This is a GROUNDBREAKING feature: BrightMind doesn't just tutor — it dynamically
 escalates or de-escalates complexity based on WHERE the student is on Bloom's Taxonomy.
 
 Levels (lowest to highest):

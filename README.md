@@ -65,20 +65,28 @@ ollama pull gemma4:9b
 cd "Design a Form"
 npm install
 npm run build
-cd ..
-python serve.py
+cd ../backend
+venv\Scripts\pip install -r requirements.txt
+venv\Scripts\python -m uvicorn app.main:app --port 8000 --reload
 ```
 
 4. **Access the application**
-- Local Frontend & Dashboard: http://localhost:5000
+- Local Frontend & Dashboard: http://localhost:8000
 - 🌐 **Live Cloud Deployment:** [https://bright-mind.onrender.com/](https://bright-mind.onrender.com/)
 
 ## 📁 Project Structure
 
 ```
 Bright-Mind/
-├── Design a Form/            # React + TypeScript commercial frontend
-├── serve.py                  # Python backend server + Ollama proxy
+├── Design a Form/            # React + TypeScript frontend
+├── backend/                  # Asynchronous FastAPI backend
+│   ├── app/                  # Main backend application
+│   │   ├── config.py         # BrightMind settings
+│   │   ├── main.py           # Unified entry point
+│   │   ├── services/         # Socratic tutors, RAG, Bloom classifiers
+│   │   └── db/               # Local SQLite database session
+│   ├── educational-kb/        # Offline curriculum documents (auto-indexed)
+│   └── requirements.txt      # Python dependencies
 └── README.md                 # This file
 ```
 
