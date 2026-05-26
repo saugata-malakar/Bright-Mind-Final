@@ -5,34 +5,34 @@ import { motion, AnimatePresence } from 'motion/react';
 // ── Video Library ─────────────────────────────────────────────────────
 const VIDEO_LIBRARY = [
   // Mathematics
-  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '12:34', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', views: '2.4M' },
-  { id: 2, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '14:10', thumbnail: '📐', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', views: '1.8M' },
-  { id: 3, title: 'Geometry: Area & Perimeter', subject: 'Mathematics', duration: '10:45', thumbnail: '📏', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', views: '3.2M' },
-  { id: 4, title: 'Introduction to Calculus', subject: 'Mathematics', duration: '09:20', thumbnail: '📉', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', views: '4.1M' },
+  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '12:34', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '2.4M' },
+  { id: 2, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '14:10', thumbnail: '📐', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '1.8M' },
+  { id: 3, title: 'Geometry: Area & Perimeter', subject: 'Mathematics', duration: '10:45', thumbnail: '📏', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '3.2M' },
+  { id: 4, title: 'Introduction to Calculus', subject: 'Mathematics', duration: '09:20', thumbnail: '📉', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '4.1M' },
 
   // Biology
-  { id: 5, title: 'Photosynthesis Explained', subject: 'Biology', duration: '07:45', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', views: '8.1M' },
-  { id: 6, title: 'DNA & Genetics', subject: 'Biology', duration: '08:50', thumbnail: '🧬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', views: '6.5M' },
-  { id: 7, title: 'The Immune System', subject: 'Biology', duration: '09:12', thumbnail: '🛡️', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', views: '5.3M' },
-  { id: 8, title: 'Cell Structure and Function', subject: 'Biology', duration: '07:44', thumbnail: '🔬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4', views: '4.8M' },
+  { id: 5, title: 'Photosynthesis Explained', subject: 'Biology', duration: '07:45', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '8.1M' },
+  { id: 6, title: 'DNA & Genetics', subject: 'Biology', duration: '08:50', thumbnail: '🧬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '6.5M' },
+  { id: 7, title: 'The Immune System', subject: 'Biology', duration: '09:12', thumbnail: '🛡️', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '5.3M' },
+  { id: 8, title: 'Cell Structure and Function', subject: 'Biology', duration: '07:44', thumbnail: '🔬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '4.8M' },
 
   // Physics
-  { id: 9, title: "Newton's 1st Law of Motion", subject: 'Physics', duration: '06:20', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4', views: '5.7M' },
-  { id: 10, title: 'What is Gravity?', subject: 'Physics', duration: '04:14', thumbnail: '🍎', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4', views: '2.1M' },
-  { id: 11, title: 'Quantum Mechanics Explained', subject: 'Physics', duration: '05:30', thumbnail: '⚛️', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4', views: '3.4M' },
-  { id: 12, title: 'Introduction to Electricity', subject: 'Physics', duration: '08:42', thumbnail: '⚡', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4', views: '1.9M' },
+  { id: 9, title: "Newton's 1st Law of Motion", subject: 'Physics', duration: '06:20', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.7M' },
+  { id: 10, title: 'What is Gravity?', subject: 'Physics', duration: '04:14', thumbnail: '🍎', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '2.1M' },
+  { id: 11, title: 'Quantum Mechanics Explained', subject: 'Physics', duration: '05:30', thumbnail: '⚛️', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '3.4M' },
+  { id: 12, title: 'Introduction to Electricity', subject: 'Physics', duration: '08:42', thumbnail: '⚡', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '1.9M' },
 
   // Chemistry
-  { id: 13, title: 'The Periodic Table', subject: 'Chemistry', duration: '11:21', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4', views: '7.2M' },
-  { id: 14, title: 'Atomic Structure', subject: 'Chemistry', duration: '10:12', thumbnail: '🧪', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', views: '4.5M' },
-  { id: 15, title: 'Chemical Bonds (Ionic & Covalent)', subject: 'Chemistry', duration: '09:55', thumbnail: '🔗', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4', views: '3.8M' },
-  { id: 16, title: 'Molarity & Solutions', subject: 'Chemistry', duration: '11:15', thumbnail: '💧', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', views: '5.1M' },
+  { id: 13, title: 'The Periodic Table', subject: 'Chemistry', duration: '11:21', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '7.2M' },
+  { id: 14, title: 'Atomic Structure', subject: 'Chemistry', duration: '10:12', thumbnail: '🧪', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '4.5M' },
+  { id: 15, title: 'Chemical Bonds (Ionic & Covalent)', subject: 'Chemistry', duration: '09:55', thumbnail: '🔗', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '3.8M' },
+  { id: 16, title: 'Molarity & Solutions', subject: 'Chemistry', duration: '11:15', thumbnail: '💧', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.1M' },
 
   // History
-  { id: 17, title: 'A Day in Ancient Egypt', subject: 'History', duration: '05:26', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', views: '4.2M' },
-  { id: 18, title: 'The Secrets of Roman Architecture', subject: 'History', duration: '04:55', thumbnail: '🏛️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4', views: '3.4M' },
-  { id: 19, title: 'The Great Wall of China', subject: 'History', duration: '05:26', thumbnail: '⚔️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', views: '5.1M' },
-  { id: 20, title: 'The Renaissance Explained', subject: 'History', duration: '05:16', thumbnail: '🎨', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', views: '2.8M' },
+  { id: 17, title: 'A Day in Ancient Egypt', subject: 'History', duration: '05:26', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '4.2M' },
+  { id: 18, title: 'The Secrets of Roman Architecture', subject: 'History', duration: '04:55', thumbnail: '🏛️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '3.4M' },
+  { id: 19, title: 'The Great Wall of China', subject: 'History', duration: '05:26', thumbnail: '⚔️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.1M' },
+  { id: 20, title: 'The Renaissance Explained', subject: 'History', duration: '05:16', thumbnail: '🎨', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '2.8M' },
 ];
 
 interface Message {
