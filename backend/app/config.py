@@ -75,6 +75,7 @@ class Settings(BaseSettings):
         "http://localhost:8000",   # FastAPI (serves built frontend)
         "http://localhost:5173",   # Vite dev server
         "https://bright-mind.onrender.com",
+        "https://bright-mind-final.onrender.com",
     ]
 
     # ─── Spaced Repetition ───────────────────────────────────────────────────
