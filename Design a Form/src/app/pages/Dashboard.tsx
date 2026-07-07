@@ -38,16 +38,16 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      {/* Welcome */}
+    <div className="max-w-6xl mx-auto space-y-6 pb-12">
+      {/* Welcome banner */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg">
-        <h2 className="text-2xl font-bold">Welcome back, Mr. Davis 👋</h2>
-        <p className="text-blue-100 mt-2">2 students need attention today. Your class mastery is trending up!</p>
-        <div className="flex gap-3 mt-5">
-          <button onClick={() => onNavigate('tutor')} className="px-5 py-2.5 bg-white text-blue-700 font-semibold rounded-xl hover:shadow-lg transition-all text-sm">
+        <h2 className="text-3xl font-extrabold">Welcome back, Mr. Davis 👋</h2>
+        <p className="text-blue-100 mt-2.5 text-base font-medium">2 students need attention today. Your class mastery is trending up!</p>
+        <div className="flex gap-3 mt-6">
+          <button onClick={() => onNavigate('tutor')} className="px-5 py-2.5 bg-white text-blue-700 font-bold rounded-xl hover:shadow-lg transition-all text-sm">
             Start Tutoring Session
           </button>
-          <button onClick={() => onNavigate('analyzer')} className="px-5 py-2.5 bg-white/20 text-white font-semibold rounded-xl hover:bg-white/30 transition-all text-sm border border-white/30">
+          <button onClick={() => onNavigate('analyzer')} className="px-5 py-2.5 bg-white/20 text-white font-bold rounded-xl hover:bg-white/30 transition-all text-sm border border-white/30">
             Analyze Student Work
           </button>
         </div>
@@ -67,12 +67,12 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             >
               <div className="flex items-center justify-between mb-3">
                 <div className={`p-2.5 rounded-xl ${stat.bg}`}>
-                  <Icon className={`w-5 h-5 bg-gradient-to-r ${stat.color} bg-clip-text`} style={{ color: stat.color.includes('blue') ? '#3b82f6' : stat.color.includes('green') ? '#10b981' : stat.color.includes('orange') ? '#f97316' : '#8b5cf6' }} />
+                  <Icon className="w-5 h-5 text-indigo-600" />
                 </div>
-                <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">{stat.change}</span>
+                <span className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">{stat.change}</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              <p className="text-sm text-gray-500 mt-0.5">{stat.label}</p>
+              <p className="text-3xl font-black text-gray-900">{stat.value}</p>
+              <p className="text-sm font-semibold text-gray-500 mt-1">{stat.label}</p>
             </motion.div>
           );
         })}
@@ -81,9 +81,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Student Table */}
         <div className="lg:col-span-3 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900">Student Progress</h3>
-            <button onClick={() => onNavigate('history')} className="text-sm text-blue-600 font-medium hover:underline">View All</button>
+          <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-slate-50/50">
+            <h3 className="text-lg font-black text-gray-900">Student Progress</h3>
+            <button onClick={() => onNavigate('history')} className="text-sm text-indigo-600 font-bold hover:underline">View All</button>
           </div>
           <div className="divide-y divide-gray-100">
             {students.map((student, i) => (
@@ -92,29 +92,29 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.05 * i }}
-                className="px-5 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="px-5 py-4 flex items-center justify-between hover:bg-gray-50/50 transition-colors"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-600 flex-shrink-0">
+                  <div className="w-10 h-10 bg-indigo-50 text-indigo-700 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 border border-indigo-100">
                     {student.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 text-sm truncate">{student.name}</p>
-                    <p className="text-xs text-gray-500">{student.subject} · {student.lastActive}</p>
+                    <p className="font-bold text-gray-800 text-sm truncate">{student.name}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{student.subject} · {student.lastActive}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-20">
-                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="flex items-center gap-4">
+                  <div className="w-24">
+                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${student.mastery > 70 ? 'bg-green-500' : student.mastery > 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                        className={`h-full rounded-full ${student.mastery > 70 ? 'bg-emerald-500' : student.mastery > 50 ? 'bg-amber-500' : 'bg-red-500'}`}
                         style={{ width: `${student.mastery}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-500 text-right mt-0.5">{student.mastery}%</p>
+                    <p className="text-xs font-semibold text-slate-500 text-right mt-0.5">{student.mastery}%</p>
                   </div>
-                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge(student.status)}`}>
-                    {student.status}
+                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${statusBadge(student.status)}`}>
+                    {student.status.toUpperCase()}
                   </span>
                 </div>
               </motion.div>
@@ -124,19 +124,19 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
         {/* Activity Feed */}
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+          <div className="p-5 border-b border-gray-100 bg-slate-50/50">
+            <h3 className="text-lg font-black text-gray-900">Recent Activity</h3>
           </div>
           <div className="p-4 space-y-3">
             {recentActivity.map((activity) => {
               const Icon = activity.icon;
               return (
-                <div key={activity.id} className={`p-3.5 rounded-xl border-l-4 ${activity.color}`}>
+                <div key={activity.id} className={`p-3.5 rounded-xl border-l-4 ${activity.color} shadow-sm`}>
                   <div className="flex items-start gap-2.5">
-                    <Icon className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-600" />
+                    <Icon className="w-4 h-4 mt-0.5 flex-shrink-0 text-slate-700" />
                     <div>
-                      <p className="font-medium text-gray-900 text-sm leading-snug">{activity.message}</p>
-                      <span className="text-xs text-gray-500 mt-1 block">{activity.time}</span>
+                      <p className="font-bold text-slate-800 text-sm leading-snug">{activity.message}</p>
+                      <span className="text-xs text-slate-400 mt-1.5 block">{activity.time}</span>
                     </div>
                   </div>
                 </div>
@@ -148,29 +148,29 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <button onClick={() => onNavigate('tutor')} className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:border-blue-500 hover:shadow-md transition-all group text-left">
-          <div>
-            <MessageSquare className="w-6 h-6 text-blue-600 mb-2" />
-            <h4 className="font-semibold text-gray-900">Socratic Tutor</h4>
-            <p className="text-sm text-gray-500 mt-1">AI-guided learning</p>
+        <button onClick={() => onNavigate('tutor')} className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:border-indigo-500 hover:shadow-md transition-all group text-left">
+          <div className="space-y-1">
+            <MessageSquare className="w-6 h-6 text-indigo-600 mb-2" />
+            <h4 className="font-extrabold text-slate-800 text-sm">Socratic Tutor</h4>
+            <p className="text-xs text-slate-500">Interactive AI Socratic chatroom</p>
           </div>
-          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
         </button>
         <button onClick={() => onNavigate('analyzer')} className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:border-orange-500 hover:shadow-md transition-all group text-left">
-          <div>
+          <div className="space-y-1">
             <BrainCircuit className="w-6 h-6 text-orange-600 mb-2" />
-            <h4 className="font-semibold text-gray-900">Gap Analyzer</h4>
-            <p className="text-sm text-gray-500 mt-1">Find knowledge gaps</p>
+            <h4 className="font-extrabold text-slate-800 text-sm">Gap Analyzer</h4>
+            <p className="text-xs text-slate-500">Scan student response anomalies</p>
           </div>
-          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-orange-500 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-orange-500 transition-colors" />
         </button>
-        <button onClick={() => onNavigate('curriculum')} className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:border-green-500 hover:shadow-md transition-all group text-left">
-          <div>
-            <BookOpen className="w-6 h-6 text-green-600 mb-2" />
-            <h4 className="font-semibold text-gray-900">Curriculum Base</h4>
-            <p className="text-sm text-gray-500 mt-1">Browse offline resources</p>
+        <button onClick={() => onNavigate('curriculum')} className="flex items-center justify-between p-5 rounded-xl border border-gray-200 bg-white hover:border-emerald-500 hover:shadow-md transition-all group text-left">
+          <div className="space-y-1">
+            <BookOpen className="w-6 h-6 text-emerald-600 mb-2" />
+            <h4 className="font-extrabold text-slate-800 text-sm">Curriculum Base</h4>
+            <p className="text-xs text-slate-500">Offline textbooks and roadmaps</p>
           </div>
-          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 transition-colors" />
         </button>
       </div>
     </div>

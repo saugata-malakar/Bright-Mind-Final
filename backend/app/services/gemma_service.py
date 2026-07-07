@@ -89,12 +89,32 @@ class GemmaService:
         messages: list[dict],
         temperature: float = 0.7,
         max_tokens: int = 1024,
+        model: Optional[str] = None,
     ) -> str:
         """
         Sends a chat completion request to Ollama, or falls back to Cloud LLM.
         """
-        if not self.active_model:
+        target_model = model or self.active_model
+        if not target_model:
             await self.discover_model()
+            target_model = self.active_model
+
+        # Smart dynamic local fallback check if not running in cloud mode
+        if not self.use_cloud_fallback:
+            try:
+                resp = await self._client.get("/api/tags")
+                if resp.status_code == 200:
+                    available = {m["name"] for m in resp.json().get("models", [])}
+                    if available and target_model not in available:
+                        # Attempt fuzzy prefix match
+                        matched = next((n for n in available if n.startswith(target_model.split(":")[0])), None)
+                        if matched:
+                            target_model = matched
+                        else:
+                            # Fallback to the first available local model to avoid 404
+                            target_model = list(available)[0]
+            except Exception:
+                pass
 
         # Validate messages — skip anything malformed
         clean_messages = []
@@ -118,7 +138,7 @@ class GemmaService:
             try:
                 openai_messages = [{"role": "system", "content": system_prompt}] + clean_messages
                 chat_completion = await self._openai_client.chat.completions.create(
-                    model=self.active_model,
+                    model=target_model or self.active_model,
                     messages=openai_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
@@ -129,7 +149,7 @@ class GemmaService:
                 return f"An error occurred while generating a response from Cloud: {e}"
 
         payload = {
-            "model": self.active_model,
+            "model": target_model,
             "system": system_prompt,
             "messages": clean_messages,
             "stream": False,
@@ -231,13 +251,13 @@ class GemmaService:
             logger.exception("Streaming error")
             yield f"\n[Stream error: {e}]"
 
-    # ─── Quick Completion (single-turn, no history) ───────────────────────────
     async def complete(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.",
         temperature: float = 0.3,
         max_tokens: int = 512,
+        model: Optional[str] = None,
     ) -> str:
         """
         Convenience wrapper for single-turn, no-history completions.
@@ -247,6 +267,7 @@ class GemmaService:
             messages=[{"role": "user", "content": prompt}],
             temperature=temperature,
             max_tokens=max_tokens,
+            model=model,
         )
 
     async def close(self):

@@ -28,9 +28,9 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
   const [isOffline] = useState(false);
 
   const navigation = [
+    { name: 'Gap Analyzer', icon: BrainCircuit, page: 'analyzer' },
     { name: 'Dashboard', icon: Home, page: 'dashboard' },
     { name: 'Socratic Tutor', icon: MessageSquare, page: 'tutor' },
-    { name: 'Gap Analyzer', icon: BrainCircuit, page: 'analyzer' },
     { name: 'Curriculum Base', icon: BookOpen, page: 'curriculum' },
     { name: 'Student History', icon: HistoryIcon, page: 'history' },
     { name: 'About Us', icon: Info, page: 'about' },
@@ -50,10 +50,10 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100">
           {sidebarOpen && (
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-sm">
+              <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">BrightMind</span>
+              <span className="font-black text-lg text-slate-800">BrightMind</span>
             </div>
           )}
           <button
@@ -76,7 +76,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
                 onClick={() => onNavigate(item.page)}
                 className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200 ${
                   isActive
-                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md shadow-orange-200'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100'
                     : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -122,15 +122,15 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
               </div>
             )}
             <button onClick={() => onNavigate('notifications')} className={`p-2 hover:bg-slate-100 rounded-lg transition-colors relative ${currentPage === 'notifications' ? 'bg-slate-100' : ''}`}>
-              <Bell className={`w-5 h-5 ${currentPage === 'notifications' ? 'text-orange-500' : 'text-slate-500'}`} />
+              <Bell className={`w-5 h-5 ${currentPage === 'notifications' ? 'text-indigo-600' : 'text-slate-500'}`} />
               <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
             </button>
             <button onClick={() => onNavigate('settings')} className={`p-2 hover:bg-slate-100 rounded-lg transition-colors ${currentPage === 'settings' ? 'bg-slate-100' : ''}`}>
-              <Settings className={`w-5 h-5 ${currentPage === 'settings' ? 'text-orange-500' : 'text-slate-500'}`} />
+              <Settings className={`w-5 h-5 ${currentPage === 'settings' ? 'text-indigo-600' : 'text-slate-500'}`} />
             </button>
             <div className="w-px h-8 bg-slate-200" />
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center shadow-sm">
+              <div className="w-9 h-9 bg-indigo-600 rounded-full flex items-center justify-center shadow-sm">
                 <span className="text-sm font-bold text-white">TD</span>
               </div>
               {sidebarOpen && (

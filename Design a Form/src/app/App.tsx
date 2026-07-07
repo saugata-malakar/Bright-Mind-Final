@@ -16,16 +16,8 @@ type AppView = 'landing' | 'auth' | 'app';
 
 export default function App() {
   const [view, setView] = useState<AppView>('landing');
-  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [currentPage, setCurrentPage] = useState('analyzer');
   const [showWelcome, setShowWelcome] = useState(false);
-
-  useEffect(() => {
-    // Check if user is already "logged in"
-    const isLoggedIn = localStorage.getItem('brightmind-logged-in');
-    if (isLoggedIn) {
-      setView('app');
-    }
-  }, []);
 
   const handleLogin = () => {
     localStorage.setItem('brightmind-logged-in', 'true');

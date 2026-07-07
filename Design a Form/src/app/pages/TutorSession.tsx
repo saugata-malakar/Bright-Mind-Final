@@ -5,34 +5,34 @@ import { motion, AnimatePresence } from 'motion/react';
 // ── Video Library ─────────────────────────────────────────────────────
 const VIDEO_LIBRARY = [
   // Mathematics
-  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '12:34', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '2.4M' },
-  { id: 2, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '14:10', thumbnail: '📐', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '1.8M' },
-  { id: 3, title: 'Geometry: Area & Perimeter', subject: 'Mathematics', duration: '10:45', thumbnail: '📏', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '3.2M' },
-  { id: 4, title: 'Introduction to Calculus', subject: 'Mathematics', duration: '09:20', thumbnail: '📉', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '4.1M' },
+  { id: 1, title: 'Introduction to Fractions', subject: 'Mathematics', duration: '07:12', thumbnail: '🔢', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/kZzoVCmUyKg', views: '2.4M' },
+  { id: 2, title: 'Basic Algebra - Solving Equations', subject: 'Mathematics', duration: '05:34', thumbnail: '📐', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/f15zA0PhSek', views: '1.8M' },
+  { id: 3, title: 'Geometry: Area & Perimeter', subject: 'Mathematics', duration: '11:45', thumbnail: '📏', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/AAY1nscluRU', views: '3.2M' },
+  { id: 4, title: 'Introduction to Calculus', subject: 'Mathematics', duration: '11:20', thumbnail: '📉', gradient: 'from-blue-500 to-indigo-600', videoUrl: 'https://www.youtube.com/embed/oR6K8hTqLqU', views: '8.7M' },
 
   // Biology
-  { id: 5, title: 'Photosynthesis Explained', subject: 'Biology', duration: '07:45', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '8.1M' },
-  { id: 6, title: 'DNA & Genetics', subject: 'Biology', duration: '08:50', thumbnail: '🧬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '6.5M' },
-  { id: 7, title: 'The Immune System', subject: 'Biology', duration: '09:12', thumbnail: '🛡️', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '5.3M' },
-  { id: 8, title: 'Cell Structure and Function', subject: 'Biology', duration: '07:44', thumbnail: '🔬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '4.8M' },
+  { id: 5, title: 'Photosynthesis Explained', subject: 'Biology', duration: '13:15', thumbnail: '🌱', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/sQK3Yr4Sc_k', views: '4.8M' },
+  { id: 6, title: 'DNA & Genetics', subject: 'Biology', duration: '08:42', thumbnail: '🧬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/NNASRkIU5Fw', views: '6.5M' },
+  { id: 7, title: 'The Immune System', subject: 'Biology', duration: '10:49', thumbnail: '🛡️', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/zQkBEPUthbk', views: '9.2M' },
+  { id: 8, title: 'Cell Structure and Function', subject: 'Biology', duration: '09:12', thumbnail: '🔬', gradient: 'from-green-500 to-emerald-600', videoUrl: 'https://www.youtube.com/embed/ujIdMtBPcNo', views: '5.1M' },
 
   // Physics
-  { id: 9, title: "Newton's 1st Law of Motion", subject: 'Physics', duration: '06:20', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.7M' },
-  { id: 10, title: 'What is Gravity?', subject: 'Physics', duration: '04:14', thumbnail: '🍎', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '2.1M' },
-  { id: 11, title: 'Quantum Mechanics Explained', subject: 'Physics', duration: '05:30', thumbnail: '⚛️', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '3.4M' },
-  { id: 12, title: 'Introduction to Electricity', subject: 'Physics', duration: '08:42', thumbnail: '⚡', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '1.9M' },
+  { id: 9, title: "Newton's 1st Law of Motion", subject: 'Physics', duration: '11:04', thumbnail: '🚀', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/kNIwAdvH44Y', views: '2.6M' },
+  { id: 10, title: 'What is Gravity?', subject: 'Physics', duration: '09:30', thumbnail: '🍎', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/7gf6YpdvtE0', views: '3.8M' },
+  { id: 11, title: 'Quantum Mechanics Explained', subject: 'Physics', duration: '12:50', thumbnail: '⚛️', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/dOMK0dQd3n8', views: '1.4M' },
+  { id: 12, title: 'Introduction to Electricity', subject: 'Physics', duration: '09:44', thumbnail: '⚡', gradient: 'from-orange-500 to-red-500', videoUrl: 'https://www.youtube.com/embed/TFlVWf8JX4A', views: '1.9M' },
 
   // Chemistry
-  { id: 13, title: 'The Periodic Table', subject: 'Chemistry', duration: '11:21', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '7.2M' },
-  { id: 14, title: 'Atomic Structure', subject: 'Chemistry', duration: '10:12', thumbnail: '🧪', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '4.5M' },
-  { id: 15, title: 'Chemical Bonds (Ionic & Covalent)', subject: 'Chemistry', duration: '09:55', thumbnail: '🔗', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '3.8M' },
-  { id: 16, title: 'Molarity & Solutions', subject: 'Chemistry', duration: '11:15', thumbnail: '💧', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.1M' },
+  { id: 13, title: 'The Periodic Table', subject: 'Chemistry', duration: '11:22', thumbnail: '⚗️', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/0RRVV4Diomg', views: '7.2M' },
+  { id: 14, title: 'Atomic Structure', subject: 'Chemistry', duration: '05:22', thumbnail: '🧪', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/xazQRcSCRaY', views: '4.5M' },
+  { id: 15, title: 'Chemical Bonds (Ionic & Covalent)', subject: 'Chemistry', duration: '09:42', thumbnail: '🔗', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/Qn-7-_GQYYM', views: '3.8M' },
+  { id: 16, title: 'Molarity & Solutions', subject: 'Chemistry', duration: '11:15', thumbnail: '💧', gradient: 'from-cyan-500 to-blue-500', videoUrl: 'https://www.youtube.com/embed/9hwmCHs0Bic', views: '2.1M' },
 
   // History
-  { id: 17, title: 'A Day in Ancient Egypt', subject: 'History', duration: '05:26', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '4.2M' },
-  { id: 18, title: 'The Secrets of Roman Architecture', subject: 'History', duration: '04:55', thumbnail: '🏛️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/movie.mp4', views: '3.4M' },
-  { id: 19, title: 'The Great Wall of China', subject: 'History', duration: '05:26', thumbnail: '⚔️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4', views: '5.1M' },
-  { id: 20, title: 'The Renaissance Explained', subject: 'History', duration: '05:16', thumbnail: '🎨', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', views: '2.8M' },
+  { id: 17, title: 'A Day in Ancient Egypt', subject: 'History', duration: '04:36', thumbnail: '🌍', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/n6-zJ9034Ew', views: '4.2M' },
+  { id: 18, title: 'The Secrets of Roman Architecture', subject: 'History', duration: '04:42', thumbnail: '🏛️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/TB5weRIYhjQ', views: '2.8M' },
+  { id: 19, title: 'The Great Wall of China', subject: 'History', duration: '04:29', thumbnail: '⚔️', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/23oHqNEqRyo', views: '5.1M' },
+  { id: 20, title: 'The Renaissance Explained', subject: 'History', duration: '11:32', thumbnail: '🎨', gradient: 'from-amber-500 to-orange-500', videoUrl: 'https://www.youtube.com/embed/bOw9wQnskWY', views: '6.8M' },
 ];
 
 interface Message {
@@ -84,7 +84,7 @@ export function TutorSession() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: currentInput,
-          history: messages.slice(-10).map(m => ({ sender: m.sender, text: m.text })),
+          history: messages.slice(-10).map(m => ({ role: m.sender === 'ai' ? 'assistant' : 'user', content: m.text })),
         }),
       });
 
@@ -94,7 +94,7 @@ export function TutorSession() {
         sender: 'ai',
         text: data.response || "I couldn't process that. Please try again.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        model: data.model || 'gemma',
+        model: data.model_used || 'gemma',
       };
       setMessages(prev => [...prev, aiMsg]);
 
@@ -139,10 +139,21 @@ export function TutorSession() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-4">
             <div className="bg-black rounded-2xl overflow-hidden shadow-xl aspect-video">
-              <video key={activeVideo.videoUrl} controls className="w-full h-full" poster={`https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop`}>
-                <source src={activeVideo.videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              {activeVideo.videoUrl.includes('youtube.com') || activeVideo.videoUrl.includes('youtu.be') ? (
+                <iframe
+                  key={activeVideo.videoUrl}
+                  src={activeVideo.videoUrl}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={activeVideo.title}
+                />
+              ) : (
+                <video key={activeVideo.videoUrl} controls className="w-full h-full" poster={`https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop`}>
+                  <source src={activeVideo.videoUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
             </div>
             <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
               <h2 className="text-xl font-bold text-gray-900">{activeVideo.title}</h2>

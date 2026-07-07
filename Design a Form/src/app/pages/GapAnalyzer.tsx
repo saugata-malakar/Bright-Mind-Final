@@ -59,12 +59,14 @@ export function GapAnalyzer() {
         body: JSON.stringify({ message: `Student is struggling with: ${chatMode.context}. Student says: ${userMsg}`, history: chatMessages })
       });
       const data = await resp.json();
-      if (data.status === 'success') {
+      if (data.response) {
         setChatMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
         setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      } else {
+        setChatMessages(prev => [...prev, { role: 'assistant', content: "I couldn't generate a response. Please try rephrasing your question." }]);
       }
     } catch {
-      setChatMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to Gemma 4 right now. Please make sure Ollama is running!" }]);
+      setChatMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to the server. Please make sure serve.py is running!" }]);
     }
     setIsChatLoading(false);
   };

@@ -1,11 +1,22 @@
 import { useState } from 'react';
-import { Search, Book, FileText, Globe, GraduationCap, Video, Star, Clock, ExternalLink, ChevronDown } from 'lucide-react';
+import { 
+  Search, Book, FileText, Globe, GraduationCap, Video, Star, Clock, 
+  ExternalLink, ChevronRight, BookOpen, Award, CheckSquare, HelpCircle, ArrowRight 
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface Resource {
-  id: number; title: string; subject: string; grade: string; type: string;
-  source: string; rating: number; duration: string; description: string;
-  docs: string; url: string;
+  id: number;
+  title: string;
+  subject: string;
+  grade: string;
+  type: string;
+  source: string;
+  rating: number;
+  duration: string;
+  description: string;
+  docs: string;
+  url: string;
 }
 
 const R: Resource[] = [
@@ -15,7 +26,6 @@ const R: Resource[] = [
 🎯 Learning Objective: Add fractions with different denominators by finding the LCD.
 
 📖 Key Concepts:
-
 1. WHY can't we add 1/2 + 1/3 directly?
    → The pieces are different sizes! A half ≠ a third.
 
@@ -81,7 +91,6 @@ Example: Solve 2x + 5 = 13
   Carbon Dioxide + Water + Sunlight → Glucose + Oxygen
 
 🔬 Two Stages:
-
 1. LIGHT-DEPENDENT REACTIONS (in Thylakoids)
    → Chlorophyll absorbs sunlight
    → Water molecules split (H₂O → H⁺ + O₂)
@@ -111,7 +120,6 @@ Example: Solve 2x + 5 = 13
 🎯 Objective: Understand the 4 stages of the water cycle.
 
 📖 The 4 Stages:
-
 1. ☀️ EVAPORATION
    → Sun heats water in oceans, lakes, rivers
    → Liquid water → water vapor (gas)
@@ -254,7 +262,7 @@ Example: Solve 2x + 5 = 13
 
 💡 Remember:
   • Perimeter = fence around a yard (cm, m)
-  • Area = carpet covering a floor (cm², m²)
+  • Area = carpet covering a floor (cm²)
 
 ✏️ Practice:
   1. Rectangle: l=8cm, w=5cm → P=26cm, A=40cm²
@@ -308,122 +316,257 @@ Example: Solve 2x + 5 = 13
 ];
 
 const CATS = [
-  { name:'Mathematics', icon:Book, color:'from-blue-500 to-indigo-600', bg:'bg-blue-50 border-blue-100' },
-  { name:'Sciences', icon:Globe, color:'from-green-500 to-emerald-600', bg:'bg-green-50 border-green-100' },
-  { name:'Humanities', icon:FileText, color:'from-amber-500 to-orange-600', bg:'bg-amber-50 border-amber-100' },
+  { name: 'Mathematics', icon: Book, color: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50 border-blue-100' },
+  { name: 'Sciences', icon: Globe, color: 'from-green-500 to-emerald-600', bg: 'bg-green-50 border-green-100' },
+  { name: 'Humanities', icon: FileText, color: 'from-amber-500 to-orange-600', bg: 'bg-amber-50 border-amber-100' },
 ];
-CATS.forEach(c => { (c as any).count = R.filter(r => r.subject === c.name).length; });
 
-const ICONS: Record<string, any> = { Lesson:GraduationCap, Video:Video, Reading:FileText, Interactive:Globe, Practice:Star };
+const ICONS: Record<string, any> = { Lesson: GraduationCap, Video: Video, Reading: FileText, Interactive: Globe, Practice: Star };
 
 export function CurriculumBase() {
   const [search, setSearch] = useState('');
-  const [cat, setCat] = useState<string|null>(null);
-  const [open, setOpen] = useState<number|null>(null);
+  const [selectedSubject, setSelectedSubject] = useState<string>('Mathematics');
+  const [selectedResourceId, setSelectedResourceId] = useState<number>(1);
+  const [showAnswers, setShowAnswers] = useState(false);
 
-  const list = R.filter(r => {
-    const q = search.toLowerCase();
-    const matchQ = !q || r.title.toLowerCase().includes(q) || r.description.toLowerCase().includes(q) || r.subject.toLowerCase().includes(q);
-    const matchC = !cat || r.subject === cat;
-    return matchQ && matchC;
+  const filteredResources = R.filter(r => {
+    const matchesSubject = r.subject === selectedSubject;
+    const matchesSearch = !search || 
+      r.title.toLowerCase().includes(search.toLowerCase()) || 
+      r.description.toLowerCase().includes(search.toLowerCase());
+    return matchesSubject && matchesSearch;
   });
 
+  const activeResource = R.find(r => r.id === selectedResourceId) || filteredResources[0] || R[0];
+
+  const handleSubjectChange = (subjectName: string) => {
+    setSelectedSubject(subjectName);
+    const firstInSub = R.find(r => r.subject === subjectName);
+    if (firstInSub) {
+      setSelectedResourceId(firstInSub.id);
+    }
+    setShowAnswers(false);
+  };
+
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-center shadow-lg">
-        <h2 className="text-3xl font-bold text-white mb-2">Educational Knowledge Base</h2>
-        <p className="text-blue-100 mb-6">Search {R.length} offline resources — textbooks, videos, and lessons.</p>
-        <div className="max-w-2xl mx-auto relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-300" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search for fractions, photosynthesis, world history..."
-            className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/15 border border-white/30 text-white placeholder-blue-200 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 outline-none transition-all text-lg" />
+    <div className="max-w-6xl mx-auto space-y-6 pb-12">
+      {/* Header Banner */}
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 rounded-2xl p-8 text-white shadow-lg text-center relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 to-transparent pointer-events-none" />
+        
+        <div className="text-left space-y-2 relative z-10 max-w-xl">
+          <h1 className="text-3xl font-black flex items-center gap-2">
+            <BookOpen className="w-8 h-8 text-blue-200" /> Syllabus Curriculum Base
+          </h1>
+          <p className="text-blue-100 text-sm font-medium">Browse {R.length} structured courses. Designed for offline deployment with real-time study notes and interactive practice problems.</p>
+        </div>
+
+        <div className="relative z-10 w-full md:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300" />
+          <input 
+            value={search} 
+            onChange={e => setSearch(e.target.value)} 
+            placeholder="Search core concepts..."
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/15 border border-white/20 text-white placeholder-blue-200 focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 outline-none transition-all text-sm" 
+          />
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="grid grid-cols-3 gap-4">
-        {CATS.map((c, i) => {
+      {/* Categories / Subject Navigation Tabs */}
+      <div className="grid grid-cols-3 gap-4 flex-shrink-0">
+        {CATS.map((c) => {
           const Icon = c.icon;
-          const active = cat === c.name;
+          const count = R.filter(r => r.subject === c.name).length;
+          const isActive = selectedSubject === c.name;
           return (
-            <motion.button key={c.name} initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.1 }}
-              onClick={() => setCat(active ? null : c.name)}
-              className={`p-5 rounded-xl border-2 text-left transition-all ${active ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-slate-200 bg-white hover:shadow-sm'}`}>
+            <button 
+              key={c.name}
+              onClick={() => handleSubjectChange(c.name)}
+              className={`p-5 rounded-xl border-2 text-left transition-all duration-300 flex items-center justify-between ${
+                isActive 
+                  ? 'border-indigo-600 bg-indigo-50/40 shadow-sm' 
+                  : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
+              }`}
+            >
               <div className="flex items-center gap-3">
-                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center shadow-sm`}>
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center shadow-sm`}>
                   <Icon className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-slate-800">{c.name}</h3>
-                  <p className="text-sm text-slate-500">{(c as any).count} resources</p>
+                <div className="hidden sm:block">
+                  <h3 className="font-bold text-slate-800 text-sm">{c.name}</h3>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold">{count} modules</p>
                 </div>
               </div>
-            </motion.button>
+              <ChevronRight className={`w-5 h-5 text-slate-400 ${isActive ? 'text-indigo-600 translate-x-1' : ''} transition-all`} />
+            </button>
           );
         })}
       </div>
 
-      {/* Resources */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-slate-500">{list.length} resources found</p>
-          {cat && <button onClick={() => setCat(null)} className="text-sm text-blue-600 hover:underline">Clear filter</button>}
+      {/* Split master-detail workspace */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        {/* LEFT SYLLABUS PATH (5/12 cols) */}
+        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[650px]">
+          <div className="p-4 border-b border-slate-100 bg-slate-50 flex-shrink-0">
+            <span className="text-sm font-bold text-slate-500 uppercase tracking-wider block">Syllabus Roadmap</span>
+            <span className="text-xs text-slate-400 block mt-1 font-medium">Chronologically ordered concept nodes.</span>
+          </div>
+
+          <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
+            {filteredResources.length > 0 ? (
+              filteredResources.map((res, index) => {
+                const isSelected = res.id === selectedResourceId;
+                const Icon = ICONS[res.type] || Book;
+                return (
+                  <button
+                    key={res.id}
+                    onClick={() => {
+                      setSelectedResourceId(res.id);
+                      setShowAnswers(false);
+                    }}
+                    className={`w-full p-4 flex items-start gap-4 text-left transition-all ${
+                      isSelected ? 'bg-indigo-50/30 border-r-4 border-indigo-600' : 'hover:bg-slate-50/50'
+                    }`}
+                  >
+                    {/* Node path indicator circle */}
+                    <div className="flex flex-col items-center flex-shrink-0 mt-0.5">
+                      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm shadow-sm ${
+                        isSelected 
+                          ? 'border-indigo-600 bg-indigo-600 text-white' 
+                          : 'border-slate-200 bg-slate-100 text-slate-500'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      {index < filteredResources.length - 1 && (
+                        <div className="w-0.5 h-10 bg-slate-100 mt-2" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="font-bold text-slate-800 text-sm block leading-relaxed truncate">{res.title}</span>
+                        <span className="text-xs bg-slate-100 text-slate-500 font-semibold px-2 py-0.5 rounded border border-slate-200 flex-shrink-0">
+                          {res.grade}
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-500 mt-1 line-clamp-2 leading-relaxed">{res.description}</p>
+                      
+                      <div className="flex items-center gap-3 mt-3 text-xs text-slate-400 font-semibold">
+                        <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {res.duration}</span>
+                        <span>·</span>
+                        <span className="bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded text-slate-600">{res.type}</span>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })
+            ) : (
+              <div className="p-8 text-center text-slate-400 space-y-2">
+                <BookOpen className="w-10 h-10 mx-auto text-slate-300" />
+                <p className="text-sm font-semibold">No syllabus concepts match search filter.</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {list.map((r, i) => {
-          const Icon = ICONS[r.type] || Book;
-          const isOpen = open === r.id;
-          return (
-            <motion.div key={r.id} initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.04 }}>
-              {/* Card */}
-              <div onClick={() => setOpen(isOpen ? null : r.id)}
-                className={`p-5 bg-white rounded-xl border cursor-pointer transition-all ${isOpen ? 'border-blue-500 shadow-lg ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'}`}>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5 text-slate-500" />
+        {/* RIGHT WORKSPACE READER & QUIZ CONSOLE (7/12 cols) */}
+        <div className="lg:col-span-7 h-[650px] flex flex-col justify-between">
+          <AnimatePresence mode="wait">
+            {activeResource ? (
+              <motion.div
+                key={activeResource.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col h-full overflow-hidden"
+              >
+                {/* Reader Header */}
+                <div className="flex justify-between items-start border-b border-slate-100 pb-4 flex-shrink-0">
+                  <div className="space-y-1.5">
+                    <span className="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 rounded">
+                      {activeResource.subject} · {activeResource.grade}
+                    </span>
+                    <h2 className="text-xl font-black text-slate-800 mt-1.5">{activeResource.title}</h2>
+                    <p className="text-xs text-slate-500">Source: {activeResource.source} · Verified curriculum standards</p>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold text-slate-800">{r.title}</h3>
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 flex-shrink-0" />
+                  <a
+                    href={activeResource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 hover:bg-slate-100 rounded-full border border-slate-200 text-slate-600 transition-all flex-shrink-0"
+                    title="Open Resource Link"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+
+                {/* Notebook-styled content wrapper */}
+                <div className="flex-1 overflow-y-auto py-5 space-y-6 pr-2">
+                  <div className="bg-amber-50/30 border border-amber-100/60 rounded-xl p-5 shadow-inner space-y-4">
+                    <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                      <GraduationCap className="w-4 h-4 text-indigo-600" /> Lesson Content & Syllabus Material
+                    </h3>
+                    <div className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed space-y-4">
+                      {activeResource.docs}
                     </div>
-                    <p className="text-sm text-slate-500 mt-1">{r.description}</p>
-                    <div className="flex items-center gap-3 mt-3">
-                      <span className="text-xs px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full font-medium">{r.subject}</span>
-                      <span className="text-xs px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full">{r.grade}</span>
-                      <span className="flex items-center gap-1 text-xs text-slate-400"><Clock className="w-3 h-3" />{r.duration}</span>
-                      <ChevronDown className={`w-4 h-4 ml-auto text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                  </div>
+
+                  {/* Interactive Practice problems / Quiz Accordion */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
+                        <HelpCircle className="w-4 h-4 text-indigo-500" /> Quick Practice Problems
+                      </h4>
+                      <button
+                        onClick={() => setShowAnswers(prev => !prev)}
+                        className="px-3 py-1 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs font-bold transition-all"
+                      >
+                        {showAnswers ? "Hide Answers" : "Show Answers"}
+                      </button>
+                    </div>
+
+                    <div className="bg-white border border-slate-100 rounded-lg p-3 text-sm text-slate-600 space-y-2">
+                      <span className="font-bold text-slate-700 block">Try solving these questions:</span>
+                      <p className="leading-relaxed">
+                        Assess your grasp by solving the practice section above. Use Socratic questions to prompt critical reasoning rather than direct copying.
+                      </p>
+                      
+                      {showAnswers && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-2 pt-2 border-t border-slate-100 bg-emerald-50/50 p-2.5 rounded text-emerald-800"
+                        >
+                          <span className="font-bold block mb-1">✓ Solution Sheet:</span>
+                          Refer to the answers annotated in the brackets of the lesson practice problems above. Focus on steps, not just results!
+                        </motion.div>
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Expanded Documentation */}
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.div initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}
-                    className="overflow-hidden">
-                    <div className="mt-2 bg-gradient-to-b from-blue-50 to-white rounded-xl border border-blue-200 p-6 shadow-inner">
-                      <h4 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <GraduationCap className="w-5 h-5 text-blue-600" /> Full Lesson Documentation
-                      </h4>
-                      <pre className="whitespace-pre-wrap font-sans text-[13px] text-slate-700 leading-relaxed bg-white rounded-lg p-5 border border-slate-200 max-h-[500px] overflow-y-auto">
-{r.docs}
-                      </pre>
-                      <div className="flex gap-3 mt-4">
-                        <a href={r.url} target="_blank" rel="noopener noreferrer"
-                          className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2 no-underline">
-                          <ExternalLink className="w-4 h-4" /> Open in Browser →
-                        </a>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          );
-        })}
+                {/* Footer redirection button */}
+                <div className="pt-4 border-t border-slate-100 flex-shrink-0 flex gap-2">
+                  <a
+                    href={activeResource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2 no-underline"
+                  >
+                    <ExternalLink className="w-4 h-4" /> Open External Resource
+                  </a>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center text-slate-400 h-full flex flex-col items-center justify-center space-y-2">
+                <BookOpen className="w-12 h-12 text-slate-300" />
+                <p className="text-base font-semibold">Select a curriculum concept node to begin reading.</p>
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
+
       </div>
     </div>
   );
